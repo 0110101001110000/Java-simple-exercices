@@ -1,22 +1,17 @@
 # Java Simple Exercises Repository
 
-This repository contains a collection of simple exercises solved in Java, completed during my studies at university and in a Java bootcamp with Spring Boot.
+This repository contains a collection of simple exercises solved in Java, completed during my studies at university.
 
 ## Contents
 
 The repository is organized into folders by category, including:
 
-* **University**: Exercises solved during my university studies, covering topics such as:
+* Exercises solved during my university studies, covering topics such as:
   * Object-oriented programming
   * Data structures
   * Algorithms
+  * Spring Boot
   * Basic Java
-
-* **Bootcamp**: Exercises solved during the Java bootcamp with Spring Boot, covering topics such as:
-  * Web development with Spring Boot
-  * RESTful APIs
-  * Databases with Spring Data JPA
-  * Authentication and authorization
 
 ## Code
 
