@@ -53,7 +53,7 @@ public class ListaSimples<T> {
                     Celula atual = iterador.getAtual();
                     Celula nova = new Celula(atual.getProximo(), elemento);
                     atual.setProximo(nova);
-                    this.tamanho ++;
+                    this.tamanho += 1;
                     break;
                 }
                 iterador.next();
@@ -91,7 +91,8 @@ public class ListaSimples<T> {
                 Celula atual = iterador.getAtual();
                 if (atual.getProximo() == null) {
                     atual.setProximo(nova);
-                    this.tamanho++;
+                    this.tamanho += 1;
+                    this.fim = nova;
                     break;
                 }
                 iterador.next();
@@ -155,6 +156,40 @@ public class ListaSimples<T> {
             
             return (T) it.getAtual().getElemento();
         }
+    }
+
+    /**
+     * @author 01101010-01110000
+     */
+    public void remove(int posicao) {
+
+        if (posicao == 0) {
+            removeInicio();
+
+        } else if (posicao == (this.tamanho - 1)) {
+            // removeFim();
+            System.out.println("Remove Fim.");
+
+        } else if ((posicao > 0) && (posicao < (this.tamanho - 1))) {
+
+            Iterador iterador = new Iterador(this.inicio);
+            int index = 0;
+            while (iterador.hasNext()) {
+                if ((posicao - 1) == index) {
+                    Celula atual = iterador.getAtual();
+                    Celula pox = atual.getProximo();
+                    atual.setProximo(pox.getProximo());
+                    this.tamanho -= 1;
+                    break;
+                }
+                iterador.next();
+                index ++;
+            }
+
+        } else {
+            System.out.println("A Posição " + posicao + " é Inválida!");
+        }
+
     }
 
     public void removeInicio() {
