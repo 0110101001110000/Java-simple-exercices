@@ -1,6 +1,10 @@
 
 import java.util.Iterator;
 
+/**
+ * Classe desenvolvida por Jackson
+ * @author Jackson
+ */
 public class Iterador<T> implements Iterator{
 
     private Celula atual;

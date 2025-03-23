@@ -264,28 +264,28 @@ public class ListaSimples<T> {
     }
 
 
-    // Other methods
-
-    /**
-     * Classe temporária, somente para testes
-     * @author 01101010-01110000
-     */
-    public void mostrarItems() {
-
-        if (this.tamanho == 0) {
-            System.out.println("A lista está vazia!!");
-
-        } else {
-
-            Iterador iterador = new Iterador(this.inicio);
-            int index = 0;
-            while (iterador.hasNext()) {
-                Celula atual = iterador.getAtual();
-                Aluno a = (Aluno) atual.getElemento();
-                System.out.println(a.getNome() + " - " + a.getIdade());
-                iterador.next();
-                index++;
-            }
-        }
-    }
+//    // Other methods
+//
+//    /**
+//     * Classe temporária, somente para testes
+//     * @author 01101010-01110000
+//     */
+//    public void mostrarItems() {
+//
+//        if (this.tamanho == 0) {
+//            System.out.println("A lista está vazia!!");
+//
+//        } else {
+//
+//            Iterador iterador = new Iterador(this.inicio);
+//            int index = 0;
+//            while (iterador.hasNext()) {
+//                Celula atual = iterador.getAtual();
+//                Aluno a = (Aluno) atual.getElemento();
+//                System.out.println(a.getNome() + " - " + a.getIdade());
+//                iterador.next();
+//                index++;
+//            }
+//        }
+//    }
 }

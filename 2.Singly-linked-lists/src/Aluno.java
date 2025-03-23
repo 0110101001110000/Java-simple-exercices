@@ -1,4 +1,8 @@
 
+/**
+ * Classe desenvolvida por Jackson
+ * @author Jackson
+ */
 public class Aluno {
     private String nome;
     private int idade;

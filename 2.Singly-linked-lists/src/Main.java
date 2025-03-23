@@ -1,6 +1,13 @@
 
-public class Main
-{
+
+// Init -------------------------------------------------------------------- //
+
+
+/**
+ * @author 01101010-01110000
+ */
+public class Main {
+
 	public static void main(String[] args) {
 
         // Welcome message
@@ -30,29 +37,16 @@ public class Main
         // Some tests
 
         lista.adicionaInicio(a1);
-        lista.adiciona(a1, 0);
-        lista.adicionaFim(a2);
-        lista.adiciona(a3, 2);
+        lista.adiciona(a2, 1);
+        lista.adicionaFim(a3);
         lista.adicionaFim(a4);
 
-        System.out.println("Após adicionar:");
-        lista.mostrarItems();
-        System.out.println("Tamanho da lista: " + lista.tamanho());
-
-        lista.remove(1);
-        lista.removeFim();
-
-        System.out.println("\nApós remover:");
-        lista.mostrarItems();
-        System.out.println("Tamanho da lista: " + lista.tamanho());
-
-        a1 = (Aluno) lista.Recupera(0);
-
-        System.out.println("\nAluno " + a4.getNome() + " existe na lista? " + lista.existeDado(a4));
-
-        lista.limpa();
-
-        System.out.println("\nApós limpar:");
-        System.out.println("Tamanho da lista: " + lista.tamanho());
+        System.out.printf("Alunos:\n  - %s;\n  - %s;\n  - %s;\n  - %s;\n",
+                ((Aluno) lista.Recupera(0)).getNome(),
+                ((Aluno) lista.Recupera(1)).getNome(),
+                ((Aluno) lista.Recupera(2)).getNome(),
+                ((Aluno) lista.Recupera(3)).getNome()
+        );
+        System.out.printf("Tamanho da lista: %d.\n", lista.tamanho());
 	}
 }
