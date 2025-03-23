@@ -1,8 +1,22 @@
 
+
+// Init -------------------------------------------------------------------- //
+
+
+/**
+ * Classe desenvolvida por Jackson
+ * @author Jackson
+ */
 public class ListaSimples<T> {
+
+
+    // Attributes
 
     private Celula inicio, fim;
     private int tamanho;
+
+
+    // Constructors
 
     public ListaSimples() {
         this.inicio = null;
@@ -15,7 +29,43 @@ public class ListaSimples<T> {
         this.fim = null;
         this.tamanho = 0;
         this.adicionaInicio(elemento);
-    
+    }
+
+
+    // Main methods
+
+    /**
+     * @author 01101010-01110000
+     */
+    public void adiciona(T elemento, int posicao) {
+        if (posicao == 0) {
+            adicionaInicio(elemento);
+
+        } else if (posicao == this.tamanho) {
+
+            // adicionaFim(elemento);
+            System.out.println("Adiciona elemento ao fim!!!");
+
+        } else if ((posicao > 0) && (posicao < this.tamanho)) {
+
+            Iterador iterador = new Iterador(this.inicio);
+            int index = 0;
+            while (iterador.hasNext()) {
+                if ((posicao - 1) == index) {
+                    Celula atual = iterador.getAtual();
+                    Celula nova = new Celula(atual.getProximo(), elemento);
+                    atual.setProximo(nova);
+                    this.tamanho ++;
+                    break;
+                }
+                iterador.next();
+                index ++;
+
+            }
+
+        } else {
+            System.out.println("A Posição " + posicao + " é Inválida!");
+        }
     }
 
     public void adicionaInicio(T elemento) {
@@ -75,7 +125,4 @@ public class ListaSimples<T> {
             this.tamanho -= 1;
         }
     }
-
 }
-
-
