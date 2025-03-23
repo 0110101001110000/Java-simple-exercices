@@ -37,12 +37,14 @@ public class Main
 
         System.out.println("Após adicionar:");
         lista.mostrarItems();
+        System.out.println("Tamanho da lista: " + lista.tamanho());
 
         lista.remove(1);
         lista.removeFim();
 
         System.out.println("\nApós remover:");
         lista.mostrarItems();
+        System.out.println("Tamanho da lista: " + lista.tamanho());
 
         a1 = (Aluno) lista.Recupera(0);
 

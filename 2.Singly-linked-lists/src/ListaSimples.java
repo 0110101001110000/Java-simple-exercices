@@ -240,6 +240,13 @@ public class ListaSimples<T> {
         }
     }
 
+    /**
+     * @author 01101010-01110000
+     */
+    public int tamanho() {
+        return this.tamanho;
+    }
+
 
     // Other methods
 
