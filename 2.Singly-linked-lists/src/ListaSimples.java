@@ -100,6 +100,34 @@ public class ListaSimples<T> {
         }
     }
 
+    /**
+     * @author 01101010-01110000
+     */
+    public boolean existeDado(T elemento) {
+
+        if (this.tamanho == 0) {
+
+            System.out.println("A lista está vazia!!");
+            return false;
+
+        } else {
+
+            Iterador iterador = new Iterador(this.inicio);
+            int index = 0;
+            while (iterador.hasNext()) {
+                Celula atual = iterador.getAtual();
+                if (atual.getElemento().equals(elemento)) {
+                    return true;
+                }
+                iterador.next();
+                index++;
+            }
+
+        }
+
+        return false;
+    }
+
     public T Recupera(int posicao) {
         
         if (this.tamanho == 0) {
