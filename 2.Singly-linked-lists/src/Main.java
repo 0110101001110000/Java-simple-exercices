@@ -38,14 +38,13 @@ public class Main
         System.out.println("Após adicionar:");
         lista.mostrarItems();
 
+        lista.remove(1);
+        lista.removeFim();
+
         System.out.println("\nApós remover:");
-        lista.removeInicio();
-        lista.remove(3);
+        lista.mostrarItems();
 
         a1 = (Aluno) lista.Recupera(0);
-
-        //System.out.println(a1.getNome() + " - " + a1.getIdade());
-        lista.mostrarItems();
 
         System.out.println("\nAluno " + a4.getNome() + " existe na lista? " + lista.existeDado(a4));
 	}

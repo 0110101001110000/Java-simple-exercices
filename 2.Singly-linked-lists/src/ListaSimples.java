@@ -167,8 +167,7 @@ public class ListaSimples<T> {
             removeInicio();
 
         } else if (posicao == (this.tamanho - 1)) {
-            // removeFim();
-            System.out.println("Remove Fim.");
+            removeFim();
 
         } else if ((posicao > 0) && (posicao < (this.tamanho - 1))) {
 
@@ -177,8 +176,8 @@ public class ListaSimples<T> {
             while (iterador.hasNext()) {
                 if ((posicao - 1) == index) {
                     Celula atual = iterador.getAtual();
-                    Celula pox = atual.getProximo();
-                    atual.setProximo(pox.getProximo());
+                    Celula prox = atual.getProximo();
+                    atual.setProximo(prox.getProximo());
                     this.tamanho -= 1;
                     break;
                 }
@@ -209,6 +208,38 @@ public class ListaSimples<T> {
         }
     }
 
+    /**
+     * @author 01101010-01110000
+     */
+    public void removeFim() {
+
+        if (this.tamanho == 0) {
+            System.out.println("A lista está vazia!!");
+
+        } else if (inicio == fim) {
+            removeInicio();
+
+        } else {
+
+            Iterador iterador = new Iterador(this.inicio);
+            int index = 0;
+            Celula atual = null;
+            Celula prox = null;
+            while (iterador.hasNext()) {
+                atual = iterador.getAtual();
+                prox = atual.getProximo();
+                if (this.fim.equals(prox)) {
+                    atual.setProximo(null);
+                    this.fim = atual;
+                    this.tamanho -= 1;
+                    break;
+                }
+                iterador.next();
+                index ++;
+            }
+        }
+    }
+
 
     // Other methods
 
@@ -217,9 +248,12 @@ public class ListaSimples<T> {
      * @author 01101010-01110000
      */
     public void mostrarItems() {
+
         if (this.tamanho == 0) {
             System.out.println("A lista está vazia!!");
+
         } else {
+
             Iterador iterador = new Iterador(this.inicio);
             int index = 0;
             while (iterador.hasNext()) {
