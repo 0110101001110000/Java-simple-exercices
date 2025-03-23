@@ -247,6 +247,22 @@ public class ListaSimples<T> {
         return this.tamanho;
     }
 
+    /**
+     * @author 01101010-01110000
+     */
+    public void limpa() {
+
+        if (this.tamanho == 0) {
+            System.out.println("A lista está vazia!");
+
+        } else {
+
+            inicio = fim = null;
+            this.tamanho = 0;
+
+        }
+    }
+
 
     // Other methods
 

@@ -49,5 +49,10 @@ public class Main
         a1 = (Aluno) lista.Recupera(0);
 
         System.out.println("\nAluno " + a4.getNome() + " existe na lista? " + lista.existeDado(a4));
+
+        lista.limpa();
+
+        System.out.println("\nApós limpar:");
+        System.out.println("Tamanho da lista: " + lista.tamanho());
 	}
 }
