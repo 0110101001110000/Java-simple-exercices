@@ -42,9 +42,7 @@ public class ListaSimples<T> {
             adicionaInicio(elemento);
 
         } else if (posicao == this.tamanho) {
-
-            // adicionaFim(elemento);
-            System.out.println("Adiciona elemento ao fim!!!");
+            adicionaFim(elemento);
 
         } else if ((posicao > 0) && (posicao < this.tamanho)) {
 
@@ -60,7 +58,6 @@ public class ListaSimples<T> {
                 }
                 iterador.next();
                 index ++;
-
             }
 
         } else {
@@ -77,6 +74,29 @@ public class ListaSimples<T> {
             nova.setProximo(inicio);
             inicio = nova;
             this.tamanho += 1;
+        }
+    }
+
+    /**
+     * @author 01101010-01110000
+     */
+    public void adicionaFim(T elemento) {
+        Celula nova = new Celula(null, elemento);
+        if (this.tamanho == 0) {
+            adicionaInicio(elemento);
+        } else {
+            Iterador iterador = new Iterador(this.inicio);
+            int index = 0;
+            while (iterador.hasNext()) {
+                Celula atual = iterador.getAtual();
+                if (atual.getProximo() == null) {
+                    atual.setProximo(nova);
+                    this.tamanho++;
+                    break;
+                }
+                iterador.next();
+                index++;
+            }
         }
     }
 
@@ -123,6 +143,29 @@ public class ListaSimples<T> {
             
             inicio = inicio.getProximo();
             this.tamanho -= 1;
+        }
+    }
+
+
+    // Other methods
+
+    /**
+     * Classe temporária, somente para testes
+     * @author 01101010-01110000
+     */
+    public void mostrarItems() {
+        if (this.tamanho == 0) {
+            System.out.println("A lista está vazia!!");
+        } else {
+            Iterador iterador = new Iterador(this.inicio);
+            int index = 0;
+            while (iterador.hasNext()) {
+                Celula atual = iterador.getAtual();
+                Aluno a = (Aluno) atual.getElemento();
+                System.out.println(a.getNome() + " - " + a.getIdade());
+                iterador.next();
+                index++;
+            }
         }
     }
 }
