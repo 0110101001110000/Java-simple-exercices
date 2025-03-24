@@ -17,7 +17,7 @@ public class TaskDTO {
 
     // Attributes
 
-    @NotNull(message = "O id não pode ser nulo")
+    // @NotNull(message = "O id não pode ser nulo")
     @Positive(message = "O id deve ser um valor positivo")
     private Integer id;
 
@@ -27,10 +27,6 @@ public class TaskDTO {
 
 
     // Constructors
-
-    public TaskDTO(String taskName) {
-        setTaskName(taskName);
-    }
 
     public TaskDTO(Integer id, String taskName) {
         setId(id);
