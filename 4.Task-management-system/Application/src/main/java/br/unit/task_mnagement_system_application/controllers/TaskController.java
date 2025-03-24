@@ -28,9 +28,7 @@ public class TaskController {
 
     @PostMapping("/task")
     private boolean createTask(@Valid @ModelAttribute TaskDTO task) {
-        if (task.getId() != null) {
-            throw new IllegalArgumentException("O id deve ser nulo.");
-        }
+        validateNullId(task.getId());
         return taskService.createTask(task);
     }
 
@@ -45,17 +43,15 @@ public class TaskController {
         return taskService.findAllTasks();
     }
 
-    @PutMapping("/task/{id}")
-    private boolean updateTaskById(@Valid @PathVariable(value = "id") Integer id, @Valid @ModelAttribute TaskDTO task) {
-        validateId(id);
-        if (task.getId() == null) {
-            throw new IllegalArgumentException("O id não pode ser nulo.");
-        }
-        return taskService.updateTaskById(id, task);
+    @PutMapping("/task/{taskId}")
+    private boolean updateTaskById(@PathVariable(value = "taskId") Integer taskId, @Valid @ModelAttribute TaskDTO task) {
+        validateId(taskId);
+        validateNullId(task.getId());
+        return taskService.updateTaskById(taskId, task);
     }
 
     @DeleteMapping("/task/{id}")
-    private boolean deleteTaskById(@Valid @PathVariable(value = "id") Integer id) {
+    private boolean deleteTaskById(@PathVariable(value = "id") Integer id) {
         validateId(id);
         return taskService.deleteTaskById(id);
     }
@@ -68,6 +64,12 @@ public class TaskController {
             throw new IllegalArgumentException("O Id não pode ser vazio");
         } else if (id < 1) {
             throw new IllegalArgumentException("O id não pode ser um valor negativo");
+        }
+    }
+
+    private void validateNullId(Integer id) {
+        if (id != null) {
+            throw new IllegalArgumentException("O id da tarefa deve ser nulo.");
         }
     }
 }

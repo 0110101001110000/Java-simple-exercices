@@ -23,7 +23,7 @@ public class IdDTO {
 
     // Constructors
 
-    public IdDTO(Integer id, String taskName) {
+    public IdDTO(Integer id) {
         setId(id);
     }
 
