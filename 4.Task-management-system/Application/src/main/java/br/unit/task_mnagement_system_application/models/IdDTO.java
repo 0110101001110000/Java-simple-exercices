@@ -18,26 +18,26 @@ public class IdDTO {
 
     @NotNull(message = "O id não pode ser nulo")
     @Positive(message = "O id deve ser um valor positivo")
-    private int id;
+    private Integer id;
 
 
     // Constructors
 
-    public IdDTO(int id, String taskName) {
+    public IdDTO(Integer id, String taskName) {
         setId(id);
     }
 
 
     // Getter methods
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
 
     // Setter methods
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

@@ -19,7 +19,7 @@ public class TaskDTO {
 
     @NotNull(message = "O id não pode ser nulo")
     @Positive(message = "O id deve ser um valor positivo")
-    private int id;
+    private Integer id;
 
     @NotNull(message = "O nome da tarefa não pode ser nulo")
     @Size(min = 2, max = 255, message = "O nome da tarefa deve ter entre 2 e 255 caracteres")
@@ -28,7 +28,11 @@ public class TaskDTO {
 
     // Constructors
 
-    public TaskDTO(int id, String taskName) {
+    public TaskDTO(String taskName) {
+        setTaskName(taskName);
+    }
+
+    public TaskDTO(Integer id, String taskName) {
         setId(id);
         setTaskName(taskName);
     }
@@ -36,7 +40,7 @@ public class TaskDTO {
 
     // Getter methods
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -47,7 +51,7 @@ public class TaskDTO {
 
     // Setter methods
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
