@@ -1,13 +1,12 @@
 
 package br.unit.task_mnagement_system_application.controllers;
 
-import br.unit.task_mnagement_system_application.models.IdDTO;
 import br.unit.task_mnagement_system_application.models.TaskDTO;
 import br.unit.task_mnagement_system_application.services.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 // Init -------------------------------------------------------------------- //
@@ -29,26 +28,46 @@ public class TaskController {
 
     @PostMapping("/task")
     private boolean createTask(@Valid @ModelAttribute TaskDTO task) {
+        if (task.getId() != null) {
+            throw new IllegalArgumentException("O id deve ser nulo.");
+        }
         return taskService.createTask(task);
     }
 
     @GetMapping("/task/{id}")
-    private TaskDTO findTaskById(@Valid @PathVariable(value = "id") IdDTO id) {
+    private TaskDTO findTaskById(@PathVariable(value = "id") Integer id) {
+        validateId(id);
         return taskService.findTaskById(id);
     }
 
     @GetMapping("/task")
-    private List<TaskDTO> findAllTasks() {
+    private ArrayList<TaskDTO> findAllTasks() {
         return taskService.findAllTasks();
     }
 
     @PutMapping("/task/{id}")
-    private boolean updateTaskById(@Valid @PathVariable(value = "id") IdDTO id, @Valid @ModelAttribute TaskDTO task) {
+    private boolean updateTaskById(@Valid @PathVariable(value = "id") Integer id, @Valid @ModelAttribute TaskDTO task) {
+        validateId(id);
+        if (task.getId() == null) {
+            throw new IllegalArgumentException("O id não pode ser nulo.");
+        }
         return taskService.updateTaskById(id, task);
     }
 
     @DeleteMapping("/task/{id}")
-    private boolean deleteTaskById(@Valid @PathVariable(value = "id") IdDTO id) {
+    private boolean deleteTaskById(@Valid @PathVariable(value = "id") Integer id) {
+        validateId(id);
         return taskService.deleteTaskById(id);
+    }
+
+
+    // Other methods
+
+    private void validateId(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("O Id não pode ser vazio");
+        } else if (id < 1) {
+            throw new IllegalArgumentException("O id não pode ser um valor negativo");
+        }
     }
 }
