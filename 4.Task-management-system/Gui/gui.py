@@ -84,7 +84,7 @@ class Gui:
         # Tasks list
         self.task_entry_status = "normal"
         self.displayed_tasks: [{"finish": ttkb.Button, "task": ttkb.Entry, "edit": ttkb.Button, "delete": ttkb.Button}] = []
-        self.display_all_tasks(self.get_all_tasks())
+        self.display_all_tasks()
 
         self.update_scrollregion()
 
@@ -122,7 +122,7 @@ class Gui:
             response = requests.post(self.API_URL, json=data)
             if response.status_code == 200:
                 self.new_task_entry.delete(0, "end")
-                self.display_all_tasks(self.get_all_tasks())
+                self.display_all_tasks()
             else:
                 messagebox.showerror(
                     "Erro",
@@ -131,7 +131,9 @@ class Gui:
         except Exception as e:
             messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
 
-    def display_all_tasks(self, tasks: [{"id": int, "taskName": str}] or []):
+    def display_all_tasks(self):
+        tasks: [{"id": int, "taskName": str}] or [] = self.get_all_tasks()
+
         # Button styles
         btn_style = ttkb.Style()
         btn_style.configure("TButton", font=(self.FONT_NAME, 10), borderwidth=0)
@@ -144,7 +146,6 @@ class Gui:
         delete_btn_style = ttkb.Style()
         delete_btn_style.configure("delete.TButton", foreground="#ff8484")
         delete_btn_style.map("delete.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
-
         row = 0
         self.displayed_tasks = []
         for task in tasks:
@@ -174,6 +175,7 @@ class Gui:
             delete_btn = ttkb.Button(self.tasks_inner_frame, text="x", style="delete.TButton")
             delete_btn.config(width=1.25)
             delete_btn.grid(column=3, row=row, padx=0, pady=0, ipadx=1, ipady=1)
+            delete_btn.bind("<1>", self.delete_task)
 
             self.displayed_tasks.append({
                 "finish": finish_btn,
@@ -193,13 +195,10 @@ class Gui:
                 break
 
         task_row   = self.displayed_tasks[index]
-        finish_btn = task_row["finish"]
         task_entry = task_row["task"]
         task_id    = task_entry.__getattribute__("id")
         edit_btn   = task_row["edit"]
-        delete_btn = task_row["delete"]
 
-        print(task_entry.get())
         edit_btn.__setattr__("active", True if (edit_btn.__getattribute__("active") is False) else False)
 
         if button.__getattribute__("active") is True:
@@ -207,18 +206,16 @@ class Gui:
             edit_btn.config(text="✓")
             task_entry.focus()
         elif button.__getattribute__("active") is False:
-
             data = {
                 "id": None,
                 "taskName": task_entry.get()
             }
-
             try:
                 response = requests.put(self.API_URL + f"/{task_id}", json=data)
                 if response.status_code == 200:
                     task_entry.config(state="readonly")
                     edit_btn.config(text="✎")
-                    self.display_all_tasks(self.get_all_tasks())
+                    self.display_all_tasks()
                 else:
                     messagebox.showerror(
                         "Erro",
@@ -227,8 +224,29 @@ class Gui:
             except Exception as e:
                 messagebox.showerror("Erro", f"Falha ao editar tarefa. Info: {e}.")
 
+    def delete_task(self, event):
+        button = event.widget
+        index  = None
+        for i in range(len(self.displayed_tasks)):
+            if self.displayed_tasks[i]["delete"] == button:
+                index = i
+                break
 
+        task_row   = self.displayed_tasks[index]
+        task_entry = task_row["task"]
+        task_id    = task_entry.__getattribute__("id")
 
+        try:
+            response = requests.delete(self.API_URL + f"/{task_id}")
+            if response.status_code == 200:
+                self.display_all_tasks()
+            else:
+                messagebox.showerror(
+                    "Erro",
+                    f"Falha ao remover tarefa. Status Code: {response.status_code}. Conteúdo: {response.json()}."
+                )
+        except Exception as e:
+            messagebox.showerror("Erro", f"Falha ao remover tarefa. Info: {e}.")
 
 
     # Other methods
