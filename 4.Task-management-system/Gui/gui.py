@@ -1,4 +1,3 @@
-from idlelib.colorizer import prog_group_name_to_tag
 
 import requests
 from tkinter import messagebox
@@ -82,11 +81,8 @@ class Gui:
         self.tasks_canvas.create_window((450/2, 0), window=self.tasks_inner_frame, anchor='n')
 
         # Tasks list
-        self.task_entry_status = "normal"
         self.displayed_tasks: [{"finish": ttkb.Button, "task": ttkb.Entry, "edit": ttkb.Button, "delete": ttkb.Button}] = []
         self.display_all_tasks()
-
-        self.update_scrollregion()
 
         # New task frame
         self.new_task_frame_style = ttkb.Style()
@@ -113,6 +109,30 @@ class Gui:
 
     # Main methods
 
+    def finish_task(self, event):
+        button = event.widget
+        index  = None
+        for i in range(len(self.displayed_tasks)):
+            if self.displayed_tasks[i]["finish"] == button:
+                index = i
+                break
+
+        task_row   = self.displayed_tasks[index]
+        task_entry = task_row["task"]
+        task_id    = task_entry.__getattribute__("id")
+
+        try:
+            response = requests.delete(self.API_URL + f"/{task_id}")
+            if response.status_code == 200:
+                self.display_all_tasks()
+            else:
+                messagebox.showerror(
+                    "Erro",
+                    f"Falha ao finalizar tarefa. Status Code: {response.status_code}. Conteúdo: {response.json()}."
+                )
+        except Exception as e:
+            messagebox.showerror("Erro", f"Falha ao finalizar tarefa. Info: {e}.")
+
     def add_task(self):
         data = {
             "id": None,
@@ -133,6 +153,8 @@ class Gui:
 
     def display_all_tasks(self):
         tasks: [{"id": int, "taskName": str}] or [] = self.get_all_tasks()
+        self.destroy_all_tasks()
+        self.displayed_tasks = []
 
         # Button styles
         btn_style = ttkb.Style()
@@ -146,13 +168,14 @@ class Gui:
         delete_btn_style = ttkb.Style()
         delete_btn_style.configure("delete.TButton", foreground="#ff8484")
         delete_btn_style.map("delete.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
+
         row = 0
-        self.displayed_tasks = []
         for task in tasks:
             # Finish task button
             finish_btn = ttkb.Button(self.tasks_inner_frame, text="✓", style="finish.TButton")
             finish_btn.config(width=1)
             finish_btn.grid(column=0, row=row, padx=5, pady=5, ipadx=1, ipady=1)
+            finish_btn.bind("<1>", self.finish_task)
 
             # Task entry
             task_entry_style = ttkb.Style()
@@ -185,6 +208,8 @@ class Gui:
             })
 
             row += 1
+
+        self.update_scrollregion()
 
     def update_task(self, event):
         button = event.widget
@@ -273,4 +298,16 @@ class Gui:
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao listar tarefas. Info: {e}.")
         return []
+
+    def destroy_all_tasks(self):
+        for i in range(len(self.displayed_tasks)):
+            task_row = self.displayed_tasks[i]
+            finish_btn = task_row["finish"]
+            task_entry = task_row["task"]
+            edit_btn = task_row["edit"]
+            delete_btn = task_row["delete"]
+            finish_btn.destroy()
+            task_entry.destroy()
+            edit_btn.destroy()
+            delete_btn.destroy()
 
