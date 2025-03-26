@@ -27,7 +27,7 @@ public class TaskController {
     // Main methods
 
     @PostMapping("/task")
-    private boolean createTask(@Valid @ModelAttribute TaskDTO task) {
+    private boolean createTask(@Valid @RequestBody TaskDTO task) {
         validateNullId(task.getId());
         return taskService.createTask(task);
     }
@@ -44,7 +44,7 @@ public class TaskController {
     }
 
     @PutMapping("/task/{taskId}")
-    private boolean updateTaskById(@PathVariable(value = "taskId") Integer taskId, @Valid @ModelAttribute TaskDTO task) {
+    private boolean updateTaskById(@PathVariable(value = "taskId") Integer taskId, @Valid @RequestBody TaskDTO task) {
         validateId(taskId);
         validateNullId(task.getId());
         return taskService.updateTaskById(taskId, task);

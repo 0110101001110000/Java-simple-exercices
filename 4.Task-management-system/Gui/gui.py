@@ -1,7 +1,8 @@
 
+import requests
+from tkinter import messagebox
 import ttkbootstrap as ttkb
 from PIL import Image, ImageTk
-from PIL.ImageOps import expand
 
 
 # Init ---------------------------------------------------------------------- #
@@ -11,6 +12,7 @@ class Gui:
     def __init__(self, root):
 
         # Constants
+        self.API_URL      = "http://localhost:8080/task"
         self.WINDOW_TITLE = "Task Management System"
         self.FONT_NAME    = "Arial"
         self.WIDTH        = 800
@@ -21,7 +23,7 @@ class Gui:
         self.LIGHT_PURPLE = "#a2b4ff"
         self.WHITE        = "#ffffff"
         self.WHITE_1      = "#f1f3f6"
-        self.WHITE_3      = "#d7dade"
+        self.WHITE_2      = "#d7dade"
 
 
         # Window
@@ -36,7 +38,7 @@ class Gui:
         # Background
         self.canvas = ttkb.Canvas(self.root)
         self.canvas.config(width=self.WIDTH, height=self.HEIGHT)
-        self.background_img = Image.open("assets/images/background.png")
+        self.background_img = Image.open("assets/images/background.jpg")
         self.background_img = self.background_img.resize((self.WIDTH, self.HEIGHT), Image.Resampling.LANCZOS)
         self.background_img = ImageTk.PhotoImage(self.background_img)
         self.canvas.create_image(0, 0, image=self.background_img, anchor="nw")
@@ -70,7 +72,7 @@ class Gui:
         self.tasks_canvas.grid(column=0, row=0, sticky="nsew")
 
         # Tasks scrollbar
-        self.tasks_scrollbar = ttkb.Scrollbar(self.tasks_frame, command=self.tasks_canvas.yview)
+        self.tasks_scrollbar = ttkb.Scrollbar(self.tasks_frame, bootstyle="round.default", command=self.tasks_canvas.yview)
         self.tasks_scrollbar.grid(column=1, row=0, sticky="ns")
 
         self.tasks_canvas.configure(yscrollcommand=self.tasks_scrollbar.set)
@@ -83,35 +85,16 @@ class Gui:
         self.btn_style.configure("TButton", font=(self.FONT_NAME, 10), borderwidth=0)
         self.finish_btn_style = ttkb.Style()
         self.finish_btn_style.configure("finish.TButton", foreground="#7dbc65")
-        self.finish_btn_style.map("finish.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_3)])
+        self.finish_btn_style.map("finish.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
         self.edit_btn_style = ttkb.Style()
         self.edit_btn_style.configure("edit.TButton", foreground="gray")
-        self.edit_btn_style.map("edit.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_3)])
+        self.edit_btn_style.map("edit.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
         self.delete_btn_style = ttkb.Style()
         self.delete_btn_style.configure("delete.TButton", foreground="#ff8484")
-        self.delete_btn_style.map("delete.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_3)])
+        self.delete_btn_style.map("delete.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
 
         # Tasks list
-        for i in range(15):
-            # Finish task button
-            self.finish_btn = ttkb.Button(self.tasks_inner_frame, text="✓", style="finish.TButton")
-            self.finish_btn.config(width=1)
-            self.finish_btn.grid(column=0, row=i, padx=5, pady=5, ipadx=1, ipady=1)
-
-            # Task entry
-            self.task_entry = ttkb.Entry(self.tasks_inner_frame, style="light.TEntry", font=(self.FONT_NAME, 10))
-            self.task_entry.config(width=40)
-            self.task_entry.grid(column=1, row=i)
-
-            # Task editor button
-            self.edit_btn = ttkb.Button(self.tasks_inner_frame, text="✎", style="edit.TButton")
-            self.edit_btn.config(width=1)
-            self.edit_btn.grid(column=2, row=i, padx=5, pady=5, ipadx=1, ipady=1)
-
-            # Task delete button
-            self.delete_btn = ttkb.Button(self.tasks_inner_frame, text="x", style="delete.TButton")
-            self.delete_btn.config(width=1.25)
-            self.delete_btn.grid(column=3, row=i, padx=0, pady=0, ipadx=1, ipady=1)
+        self.list_all_tasks(self.get_all_tasks())
 
         self.update_scrollregion()
 
@@ -134,8 +117,70 @@ class Gui:
         self.new_task_btn_style.map(
             "new_task.TButton", background=[("!active", self.LIGHT_PURPLE), ("active", self.PURPLE)]
         )
-        self.new_task_btn = ttkb.Button(self.new_task_frame, text="+", style="new_task.TButton")
+        self.new_task_btn = ttkb.Button(self.new_task_frame, text="+", style="new_task.TButton", command=self.add_task)
         self.new_task_btn.grid(column=1, row=0)
+
+    def add_task(self):
+        data = {
+            "id": None,
+            "taskName": self.new_task_entry.get()
+        }
+        try:
+            response = requests.post(self.API_URL, json=data)
+            if response.status_code == 200:
+                print("Task adicionada com sucesso!!")
+                self.new_task_entry.delete(0, "end")
+                self.list_all_tasks(self.get_all_tasks())
+            else:
+                messagebox.showerror(
+                    "Erro",
+                    f"Falha ao adicionar tarefa. Status Code: {response.status_code}. Conteúdo: {response.content}."
+                )
+        except Exception as e:
+            messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
+
+    def get_all_tasks(self):
+        try:
+            response = requests.get(self.API_URL)
+            if response.status_code == 200:
+                return response.json()
+            else:
+                messagebox.showerror(
+                    "Erro",
+                    f"Falha ao listar tarefas. Status Code: {response.status_code}. Conteúdo: {response.json()}."
+                )
+        except Exception as e:
+            messagebox.showerror("Erro", f"Falha ao listar tarefas. Info: {e}.")
+        return []
+
+    def list_all_tasks(self, tasks: [{"id": int, "taskName": str}] or []):
+        row = 0
+        for task in tasks:
+            # Finish task button
+            self.finish_btn = ttkb.Button(self.tasks_inner_frame, text="✓", style="finish.TButton")
+            self.finish_btn.config(width=1)
+            self.finish_btn.grid(column=0, row=row, padx=5, pady=5, ipadx=1, ipady=1)
+
+            # Task entry
+            self.task_entry_style = ttkb.Style()
+            self.task_entry_style.configure("task_entry.TEntry", borderwidth=0)
+            self.task_entry_style.map("task_entry.TEntry", background=[("!active", self.WHITE), ("active", self.WHITE)])
+            self.task_entry = ttkb.Entry(self.tasks_inner_frame, style="light.TEntry", font=(self.FONT_NAME, 10))
+            self.task_entry.insert(0, task["taskName"])
+            self.task_entry.config(width=40, state="readonly")
+            self.task_entry.grid(column=1, row=row)
+
+            # Task editor button
+            self.edit_btn = ttkb.Button(self.tasks_inner_frame, text="✎", style="edit.TButton")
+            self.edit_btn.config(width=1)
+            self.edit_btn.grid(column=2, row=row, padx=5, pady=5, ipadx=1, ipady=1)
+
+            # Task delete button
+            self.delete_btn = ttkb.Button(self.tasks_inner_frame, text="x", style="delete.TButton")
+            self.delete_btn.config(width=1.25)
+            self.delete_btn.grid(column=3, row=row, padx=0, pady=0, ipadx=1, ipady=1)
+
+            row += 1
 
     def update_scrollregion(self):
         self.tasks_inner_frame.update_idletasks()
