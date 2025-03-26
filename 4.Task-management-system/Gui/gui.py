@@ -1,3 +1,4 @@
+from idlelib.colorizer import prog_group_name_to_tag
 
 import requests
 from tkinter import messagebox
@@ -80,21 +81,10 @@ class Gui:
         self.tasks_inner_frame = ttkb.Frame(self.tasks_canvas, style="tasks_frame.TFrame")
         self.tasks_canvas.create_window((450/2, 0), window=self.tasks_inner_frame, anchor='n')
 
-        # Button styles
-        self.btn_style = ttkb.Style()
-        self.btn_style.configure("TButton", font=(self.FONT_NAME, 10), borderwidth=0)
-        self.finish_btn_style = ttkb.Style()
-        self.finish_btn_style.configure("finish.TButton", foreground="#7dbc65")
-        self.finish_btn_style.map("finish.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
-        self.edit_btn_style = ttkb.Style()
-        self.edit_btn_style.configure("edit.TButton", foreground="gray")
-        self.edit_btn_style.map("edit.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
-        self.delete_btn_style = ttkb.Style()
-        self.delete_btn_style.configure("delete.TButton", foreground="#ff8484")
-        self.delete_btn_style.map("delete.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
-
         # Tasks list
-        self.list_all_tasks(self.get_all_tasks())
+        self.task_entry_status = "normal"
+        self.displayed_tasks: [{"finish": ttkb.Button, "task": ttkb.Entry, "edit": ttkb.Button, "delete": ttkb.Button}] = []
+        self.display_all_tasks(self.get_all_tasks())
 
         self.update_scrollregion()
 
@@ -120,6 +110,9 @@ class Gui:
         self.new_task_btn = ttkb.Button(self.new_task_frame, text="+", style="new_task.TButton", command=self.add_task)
         self.new_task_btn.grid(column=1, row=0)
 
+
+    # Main methods
+
     def add_task(self):
         data = {
             "id": None,
@@ -128,9 +121,8 @@ class Gui:
         try:
             response = requests.post(self.API_URL, json=data)
             if response.status_code == 200:
-                print("Task adicionada com sucesso!!")
                 self.new_task_entry.delete(0, "end")
-                self.list_all_tasks(self.get_all_tasks())
+                self.display_all_tasks(self.get_all_tasks())
             else:
                 messagebox.showerror(
                     "Erro",
@@ -138,6 +130,117 @@ class Gui:
                 )
         except Exception as e:
             messagebox.showerror("Erro", f"Ocorreu um erro: {e}")
+
+    def display_all_tasks(self, tasks: [{"id": int, "taskName": str}] or []):
+        # Button styles
+        btn_style = ttkb.Style()
+        btn_style.configure("TButton", font=(self.FONT_NAME, 10), borderwidth=0)
+        finish_btn_style = ttkb.Style()
+        finish_btn_style.configure("finish.TButton", foreground="#7dbc65")
+        finish_btn_style.map("finish.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
+        edit_btn_style = ttkb.Style()
+        edit_btn_style.configure("edit.TButton", foreground="gray")
+        edit_btn_style.map("edit.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
+        delete_btn_style = ttkb.Style()
+        delete_btn_style.configure("delete.TButton", foreground="#ff8484")
+        delete_btn_style.map("delete.TButton", background=[("!active", self.WHITE), ("active", self.WHITE_2)])
+
+        row = 0
+        self.displayed_tasks = []
+        for task in tasks:
+            # Finish task button
+            finish_btn = ttkb.Button(self.tasks_inner_frame, text="✓", style="finish.TButton")
+            finish_btn.config(width=1)
+            finish_btn.grid(column=0, row=row, padx=5, pady=5, ipadx=1, ipady=1)
+
+            # Task entry
+            task_entry_style = ttkb.Style()
+            task_entry_style.configure("task_entry.TEntry", borderwidth=0)
+            task_entry_style.map("task_entry.TEntry", background=[("!active", self.WHITE), ("active", self.WHITE)])
+            task_entry = ttkb.Entry(self.tasks_inner_frame, style="light.TEntry", font=(self.FONT_NAME, 10))
+            task_entry.insert(0, task["taskName"])
+            task_entry.config(width=40, state="readonly")
+            task_entry.__setattr__("id", task["id"])
+            task_entry.grid(column=1, row=row)
+
+            # Task editor button
+            edit_btn = ttkb.Button(self.tasks_inner_frame, text="✎", style="edit.TButton")
+            edit_btn.config(width=1)
+            edit_btn.grid(column=2, row=row, padx=5, pady=5, ipadx=1, ipady=1)
+            edit_btn.__setattr__("active", False)
+            edit_btn.bind("<1>", self.update_task)
+
+            # Task delete button
+            delete_btn = ttkb.Button(self.tasks_inner_frame, text="x", style="delete.TButton")
+            delete_btn.config(width=1.25)
+            delete_btn.grid(column=3, row=row, padx=0, pady=0, ipadx=1, ipady=1)
+
+            self.displayed_tasks.append({
+                "finish": finish_btn,
+                "task": task_entry,
+                "edit": edit_btn,
+                "delete": delete_btn
+            })
+
+            row += 1
+
+    def update_task(self, event):
+        button = event.widget
+        index  = None
+        for i in range(len(self.displayed_tasks)):
+            if self.displayed_tasks[i]["edit"] == button:
+                index = i
+                break
+
+        task_row   = self.displayed_tasks[index]
+        finish_btn = task_row["finish"]
+        task_entry = task_row["task"]
+        task_id    = task_entry.__getattribute__("id")
+        edit_btn   = task_row["edit"]
+        delete_btn = task_row["delete"]
+
+        print(task_entry.get())
+        edit_btn.__setattr__("active", True if (edit_btn.__getattribute__("active") is False) else False)
+
+        if button.__getattribute__("active") is True:
+            task_entry.config(state="normal")
+            edit_btn.config(text="✓")
+            task_entry.focus()
+        elif button.__getattribute__("active") is False:
+
+            data = {
+                "id": None,
+                "taskName": task_entry.get()
+            }
+
+            try:
+                response = requests.put(self.API_URL + f"/{task_id}", json=data)
+                if response.status_code == 200:
+                    task_entry.config(state="readonly")
+                    edit_btn.config(text="✎")
+                    self.display_all_tasks(self.get_all_tasks())
+                else:
+                    messagebox.showerror(
+                        "Erro",
+                        f"Falha ao editar tarefa. Status Code: {response.status_code}. Conteúdo: {response.json()}."
+                    )
+            except Exception as e:
+                messagebox.showerror("Erro", f"Falha ao editar tarefa. Info: {e}.")
+
+
+
+
+
+    # Other methods
+
+    def clicked_widget(self, event):
+        widget_clicado = event.widget
+        print(f"Clicou em: {widget_clicado}")
+        widget_clicado.config(text="AU")
+
+    def update_scrollregion(self):
+        self.tasks_inner_frame.update_idletasks()
+        self.tasks_canvas.configure(scrollregion=self.tasks_canvas.bbox("all"))
 
     def get_all_tasks(self):
         try:
@@ -152,37 +255,4 @@ class Gui:
         except Exception as e:
             messagebox.showerror("Erro", f"Falha ao listar tarefas. Info: {e}.")
         return []
-
-    def list_all_tasks(self, tasks: [{"id": int, "taskName": str}] or []):
-        row = 0
-        for task in tasks:
-            # Finish task button
-            self.finish_btn = ttkb.Button(self.tasks_inner_frame, text="✓", style="finish.TButton")
-            self.finish_btn.config(width=1)
-            self.finish_btn.grid(column=0, row=row, padx=5, pady=5, ipadx=1, ipady=1)
-
-            # Task entry
-            self.task_entry_style = ttkb.Style()
-            self.task_entry_style.configure("task_entry.TEntry", borderwidth=0)
-            self.task_entry_style.map("task_entry.TEntry", background=[("!active", self.WHITE), ("active", self.WHITE)])
-            self.task_entry = ttkb.Entry(self.tasks_inner_frame, style="light.TEntry", font=(self.FONT_NAME, 10))
-            self.task_entry.insert(0, task["taskName"])
-            self.task_entry.config(width=40, state="readonly")
-            self.task_entry.grid(column=1, row=row)
-
-            # Task editor button
-            self.edit_btn = ttkb.Button(self.tasks_inner_frame, text="✎", style="edit.TButton")
-            self.edit_btn.config(width=1)
-            self.edit_btn.grid(column=2, row=row, padx=5, pady=5, ipadx=1, ipady=1)
-
-            # Task delete button
-            self.delete_btn = ttkb.Button(self.tasks_inner_frame, text="x", style="delete.TButton")
-            self.delete_btn.config(width=1.25)
-            self.delete_btn.grid(column=3, row=row, padx=0, pady=0, ipadx=1, ipady=1)
-
-            row += 1
-
-    def update_scrollregion(self):
-        self.tasks_inner_frame.update_idletasks()
-        self.tasks_canvas.configure(scrollregion=self.tasks_canvas.bbox("all"))
 
