@@ -1,4 +1,6 @@
 
+package br.unit;
+
 
 // Init -------------------------------------------------------------------- //
 
@@ -14,23 +16,23 @@ public class Fila<T> {
     // Attributes
 
     /**
-     * Primeiro elemento armazenado na Fila.
+     * Primeiro elemento armazenado na br.unit.Fila.
      */
     private Celula inicio;
 
     /**
-     * Ultimo elemento armazenado na Fila.
+     * Ultimo elemento armazenado na br.unit.Fila.
      */
     private Celula fim;
 
     /**
-     * Quantidade de elementos armazenados na Fila.
+     * Quantidade de elementos armazenados na br.unit.Fila.
      */
     private int    tamanho;
 
     /**
-     * Tipo da Fila.
-     * O tipo da Fila, pode ser <i>normal</i> ou <i>especial</i>
+     * Tipo da br.unit.Fila.
+     * O tipo da br.unit.Fila, pode ser <i>normal</i> ou <i>especial</i>
      */
     private String tipo;
 
@@ -38,7 +40,7 @@ public class Fila<T> {
     // Constructors
 
     /**
-     * Cria uma nova Fila com seus atributos padrões.
+     * Cria uma nova br.unit.Fila com seus atributos padrões.
      * @since 1.0
      */
     public Fila() {
@@ -46,8 +48,8 @@ public class Fila<T> {
     }
 
     /**
-     * Cria uma nova Fila com seus atributos padrões exceto o seu atributo <i>tipo</i>.
-     * @param tipo o tipo da Fila, pode ser <i>normal</i> ou <i>especial</i>
+     * Cria uma nova br.unit.Fila com seus atributos padrões exceto o seu atributo <i>tipo</i>.
+     * @param tipo o tipo da br.unit.Fila, pode ser <i>normal</i> ou <i>especial</i>
      * @since 1.0
      */
     public Fila(String tipo) {
@@ -99,10 +101,10 @@ public class Fila<T> {
     }
 
 
-    // Main methods
+    // br.unit.Main methods
 
     /**
-     * Adiciona um elemento no fim da Fila.
+     * Adiciona um elemento no fim da br.unit.Fila.
      * @param elemento o elemento à ser adicionado
      * @since 1.0
      */
@@ -118,9 +120,9 @@ public class Fila<T> {
     }
 
     /**
-     * Verifica se o elemento fornecido é igual ao primeiro elemento da Fila.
-     * @param elemento o elemento à ser comparado com o primeiro da Fila
-     * @return <i>true</i> caso o elemento fornecido seja igual ao ao primeiro elemento da Fila, <i>false</i> caso contrário
+     * Verifica se o elemento fornecido é igual ao primeiro elemento da br.unit.Fila.
+     * @param elemento o elemento à ser comparado com o primeiro da br.unit.Fila
+     * @return <i>true</i> caso o elemento fornecido seja igual ao ao primeiro elemento da br.unit.Fila, <i>false</i> caso contrário
      * @since 1.0
      */
     public boolean existeDado(T elemento) {
@@ -131,7 +133,7 @@ public class Fila<T> {
     }
 
     /**
-     * Verifica se a Fila está vazia.
+     * Verifica se a br.unit.Fila está vazia.
      * @return <i>false</i> caso o tamanho da lista seja superior a 0, <i>true</i> caso contrário
      * @since 1.0
      */
@@ -140,8 +142,8 @@ public class Fila<T> {
     }
 
     /**
-     * Retorna o objeto do primeiro item da Fila. Obs: não o remove.
-     * @return o objeto do primeiro item da Fila
+     * Retorna o objeto do primeiro item da br.unit.Fila. Obs: não o remove.
+     * @return o objeto do primeiro item da br.unit.Fila
      * @since 1.0
      */
     public T recuperar() {
