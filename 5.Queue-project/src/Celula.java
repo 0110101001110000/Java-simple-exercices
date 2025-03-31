@@ -4,6 +4,8 @@
 
 
 /**
+ * Representa uma célula de uma fila.
+ * Cada célula contém um elemento e um ponteiro para a próxima célula.
  * @author 01101010-01110000
  */
 public class Celula {
@@ -17,14 +19,26 @@ public class Celula {
 
     // Constructors
 
+    /**
+     * Cria uma nova célula com ponteiro nulo e sem elemento.
+     */
     public Celula() {
         this(null, null);
     }
 
+    /**
+     * Cria uma nova célula com o dado elemento e ponteiro nulo.
+     * @param elemento o elemento a ser armazenado
+     */
     public Celula(Object elemento) {
         this(null, elemento);
     }
 
+    /**
+     * Cria uma nova célula com o dado elemento e ponteiro para a próxima célula.
+     * @param proximo   o próximo elemento da lista
+     * @param elemento  o elemento a ser armazenado
+     */
     public Celula(Celula proximo, Object elemento) {
         setProximo(proximo);
         setElemento(elemento);
