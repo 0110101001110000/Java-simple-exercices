@@ -152,4 +152,37 @@ public class Fila<T> {
         }
         return (T) getInicio().getElemento();
     }
+ //altera o primeiro elemento da fila
+    public void alterar(T elemento) {
+        if (this.isEmpity()) {
+            throw new IllegalStateException("A fila está vazia");
+        }
+        getInicio().setElemento(elemento);
+    }
+
+    //remove o primeiro elemento da fila
+    public void remover() {
+        if (this.isEmpity()) {
+            throw new IllegalStateException("A fila está vazia");
+        }
+        setInicio(getInicio().getProximo());
+        setTamanho(getTamanho() - 1);
+        if (this.isEmpity()) {
+            setFim(null); // Se a fila ficar vazia, fim também é nulo
+        }
+    }
+
+    //retorna o tamanho da fila
+    public int tamanho() {
+        return getTamanho();
+    }
+
+    //limpa a fila
+    public void limpar() {
+        setInicio(null);
+        setFim(null);
+        setTamanho(0);
+    }
 }
+
+
