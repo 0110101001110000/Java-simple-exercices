@@ -1,8 +1,15 @@
+
 package br.unit;
 
+
+// Init -------------------------------------------------------------------- //
+
+
 public class Main {
+
     public static void main(String[] args) {
-    	
+
+        // Welcome message
         System.out.println("""
              .-')                   ('-.                        _ (`-. _  .-')                           ('-.             .-') _   \s
            .(  OO)                _(  OO)                      ( (OO  | \\( -O )                        _(  OO)           (  OO) )  \s
@@ -20,9 +27,9 @@ public class Main {
         Fila<Pessoa> filaNormal = new Fila<>();
 
         // Inserindo pessoas nas filas
-        filaEspecial.inserir(new Pessoa("Ana", "F", "65")); // Prioridade (idosa)
-        filaEspecial.inserir(new Pessoa("João", "M", "70")); // Prioridade (idoso)
-        filaEspecial.inserir(new Pessoa("Maria", "F", "68")); // Prioridade (idosa)
+        filaEspecial.inserir(new Pessoa("Ana", "F", "65"));
+        filaEspecial.inserir(new Pessoa("João", "M", "70"));
+        filaEspecial.inserir(new Pessoa("Maria", "F", "68"));
         filaNormal.inserir(new Pessoa("Pedro", "M", "30"));
         filaNormal.inserir(new Pessoa("Lucas", "M", "25"));
 
@@ -40,7 +47,7 @@ public class Main {
             Pessoa pessoaAtendida = null;
 
             // Define qual fila será consumida primeiro
-            if (i == 1 || i == 2) { // Caixas 1 e 2 priorizam fila especial
+            if (i == 1 || i == 2) {
                 if (!filaEspecial.isEmpity()) {
                     proxFila = "especial";
                     pessoaAtendida = filaEspecial.recuperar();
@@ -52,7 +59,7 @@ public class Main {
                 } else {
                     proxFila = null;
                 }
-            } else { // Caixas 3, 4 e 5 priorizam fila normal
+            } else {
                 if (!filaNormal.isEmpity()) {
                     proxFila = "normal";
                     pessoaAtendida = filaNormal.recuperar();
