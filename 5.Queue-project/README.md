@@ -1,17 +1,8 @@
 # Queue-project
 
-Este projeto é uma implementação simples de uma estrutura de dados do tipo Fila (Queue) em Java.
 
-## Observações
+Este projeto consiste em uma implementação básica da estrutura de dados Fila (Queue) utilizando a linguagem Java. O objetivo principal foi aplicar conceitos de estruturas de dados e programação orientada a objetos em um cenário prático.
 
-*   **Colaboradores:** Este projeto foi desenvolvido em grupo por:
-    *   [@0110101001110000](https://github.com/0110101001110000)
-    *   [@fragamateus](https://github.com/fragamateus)
-    *   [@carloskayky](https://github.com/carloskayky)
-*   **Contexto:** Foi criado como um exercício para obtenção de nota em uma disciplina da universidade.
-*   **Prazo:** Tivemos o prazo de 1 semana para desenvolver, apresentar e entregar o projeto completo.
-*   **Entregáveis Adicionais:** Além do código-fonte Java, o projeto incluiu a elaboração dos seguintes artefatos:
-    *   Documentação de especificação do sistema
-    *   Documentação de especificação da UML
-    *   Diagrama UML
-    *   Documentação do código (utilizando JavaDoc)
+O desenvolvimento foi realizado em grupo como parte de um exercício avaliativo para uma disciplina da universidade. Os membros da equipe foram [@0110101001110000](https://github.com/0110101001110000), [@fragamateus](https://github.com/fragamateus) e [@carloskayky](https://github.com/carloskayky). O prazo total para a concepção, desenvolvimento, testes, documentação e apresentação foi de uma semana.
+
+Além da implementação do código-fonte em Java, o escopo do trabalho envolveu a criação de artefatos de engenharia de software essenciais, como a documentação de especificação dos requisitos do sistema, a especificação detalhada da modelagem UML (Unified Modeling Language), o diagrama UML correspondente e a documentação do código utilizando o padrão JavaDoc para explicar classes e métodos.
