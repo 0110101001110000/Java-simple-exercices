@@ -119,6 +119,13 @@ public class ListaDuplamenteEncadeada<T> {  // Renomeado de ListaSimples
         }
     }
 
+    public T ultimoElemento() {
+        if (tamanho == 0) {
+            throw new RuntimeException("Lista vazia");
+        }
+        return (T) fim.getElemento();
+    }
+
     public void remover(int posicao) {  // Renomeado de remove
         if (posicao == 0) {
             removerInicio();  // Ajustado de removeInicio
