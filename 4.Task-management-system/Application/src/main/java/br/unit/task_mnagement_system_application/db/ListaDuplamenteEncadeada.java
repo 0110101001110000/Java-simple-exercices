@@ -1,5 +1,7 @@
 package br.unit.task_mnagement_system_application.db;
 
+import java.util.ArrayList;
+
 /**
  * Classe desenvolvida por Jackson
  * @author Jackson
@@ -84,6 +86,16 @@ public class ListaDuplamenteEncadeada<T> {  // Renomeado de ListaSimples
             iterador.next();
         }
         return false;
+    }
+
+    public ArrayList<T> recuperarTodosElementos() {
+        ArrayList<T> elementos = new ArrayList<>();
+        Celula atual = inicio;
+        while (atual != null) {
+            elementos.add((T) atual.getElemento());
+            atual = atual.getProximo();
+        }
+        return elementos;
     }
 
     public T Recupera(int posicao) {  
