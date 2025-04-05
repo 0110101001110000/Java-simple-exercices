@@ -2,7 +2,7 @@
 package br.unit.stack_project.services;
 
 import br.unit.stack_project.models.UrlDTO;
-import br.unit.stack_project.repositories.BackWardDAO;
+import br.unit.stack_project.repositories.ForWardDAO;
 import org.springframework.stereotype.Service;
 
 
@@ -13,25 +13,25 @@ import org.springframework.stereotype.Service;
  * @author 0110101001110000
  */
 @Service
-public class BackWardService {
+public class ForWardService {
 
 
     // Attributes
 
-    private final BackWardDAO backWardDAO = new BackWardDAO();
+    private final ForWardDAO forWardDAO = new ForWardDAO();
 
 
     // Main methods
 
     public String createElement(UrlDTO url) {
-        return backWardDAO.createElement(url);
+        return forWardDAO.createElement(url);
     }
 
     public UrlDTO getElement() {
-        return backWardDAO.getElement();
+        return forWardDAO.getElement();
     }
 
     public String deleteElement() {
-        return backWardDAO.deleteElement();
+        return forWardDAO.deleteElement();
     }
 }
