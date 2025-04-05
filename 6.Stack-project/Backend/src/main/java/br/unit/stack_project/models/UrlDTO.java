@@ -1,6 +1,8 @@
 
 package br.unit.stack_project.models;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 
 
@@ -12,7 +14,9 @@ public class UrlDTO {
 
     // Attributes
 
+    @NotNull(message = "Url não pode ser null")
     @URL(message = "Url inválida")
+    @NotEmpty(message = "Url não pode estar vazia")
     private String url;
 
 
@@ -25,7 +29,7 @@ public class UrlDTO {
 
     // Getter methods
 
-    private String getUrl() {
+    public String getUrl() {
         return url;
     }
 

@@ -2,9 +2,7 @@
 package br.unit.stack_project.repositories;
 
 import br.unit.stack_project.db.Stack;
-import br.unit.stack_project.utils.CustomResponse;
 import br.unit.stack_project.models.UrlDTO;
-import org.springframework.http.ResponseEntity;
 
 
 // Init -------------------------------------------------------------------- //
@@ -20,28 +18,17 @@ public class BackWardDAO {
 
     // Main methods
 
-    public ResponseEntity<Object> createElement(UrlDTO url) {
-        try {
-            database.push(url);
-            return CustomResponse.created("O histórico foi armazenado");
-        } catch (Exception e) {
-            return CustomResponse.serverError(String.format("Não foi possível armazenar o histórico. Erro: %s.", e.getMessage()));
-        }
+    public String createElement(UrlDTO url) {
+        database.push(url);
+        return "O Histórico de backward foi adicionado";
     }
 
-    public ResponseEntity<Object> getElement() {
-        try {
-            return CustomResponse.success(database.peek());
-        } catch (Exception e) {
-            return CustomResponse.serverError(String.format("Não foi possível obter o histórico. Erro: %s.", e.getMessage()));
-        }
+    public UrlDTO getElement() {
+        return database.peek();
     }
 
-    public ResponseEntity<Object> deleteElement() {
-        try {
-            return CustomResponse.success(database.pop());
-        } catch (Exception e) {
-            return CustomResponse.serverError(String.format("Não foi possível deletar o histórico. Erro: %s.", e.getMessage()));
-        }
+    public String deleteElement() {
+        database.pop();
+        return "O Histórico de backward foi removido";
     }
 }
