@@ -2,7 +2,7 @@
 package br.unit.stack_project.controllers;
 
 import br.unit.stack_project.models.UrlDTO;
-import br.unit.stack_project.services.BackWardService;
+import br.unit.stack_project.services.ForWardService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +19,13 @@ import java.util.logging.Logger;
  * @author 0110101001110000
  */
 @RestController
-@RequestMapping("/api/backward")
-public class BackWardController {
+@RequestMapping("/api/forward")
+public class ForWardController {
 
 
     // Attributes
 
-    private final BackWardService backWardService = new BackWardService();
+    private final ForWardService forWardService= new ForWardService();
 
 
     // Main methods
@@ -33,24 +33,24 @@ public class BackWardController {
     @PostMapping
     private ResponseEntity<String> createElement(@RequestBody @Valid UrlDTO url) {
         try {
-            String response = backWardService.createElement(url);
-            Logger.getLogger(BackWardController.class.getName()).info("Foi adicionado um novo histórico de backward");
+            String response = forWardService.createElement(url);
+            Logger.getLogger(ForWardController.class.getName()).info("Foi adicionado um novo histórico de forward");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (RuntimeException e) {
-            Logger.getLogger(BackWardController.class.getName()).log(Level.SEVERE, "Erro ao adicionar histórico de backward", e);
-            return new ResponseEntity<>("Erro ao adicionar histórico de backward", HttpStatus.INTERNAL_SERVER_ERROR);
+            Logger.getLogger(ForWardController.class.getName()).log(Level.SEVERE, "Erro ao adicionar histórico de forward", e);
+            return new ResponseEntity<>("Erro ao adicionar histórico de forward", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping
     private ResponseEntity<UrlDTO> getElement() {
         try {
-            UrlDTO response = backWardService.getElement();
+            UrlDTO response = forWardService.getElement();
             UrlDTO url = (response != null) ? response : new UrlDTO(null);
-            Logger.getLogger(BackWardController.class.getName()).info("O Histórico de backward foi listado");
+            Logger.getLogger(ForWardController.class.getName()).info("O Histórico de forward foi listado");
             return new ResponseEntity<>(url, HttpStatus.OK);
         } catch (RuntimeException e) {
-            Logger.getLogger(BackWardController.class.getName()).log(Level.SEVERE, "Erro ao listar histórico de backward", e);
+            Logger.getLogger(ForWardController.class.getName()).log(Level.SEVERE, "Erro ao listar histórico de forward", e);
             UrlDTO url = new UrlDTO(null);
             return new ResponseEntity<>(url, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -59,12 +59,12 @@ public class BackWardController {
     @DeleteMapping
     private ResponseEntity<String> deleteElement() {
         try {
-            String response = backWardService.deleteElement();
-            Logger.getLogger(BackWardController.class.getName()).info("O Histórico de backward foi removido");
+            String response = forWardService.deleteElement();
+            Logger.getLogger(ForWardController.class.getName()).info("O Histórico de forward foi removido");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (RuntimeException e) {
-            Logger.getLogger(BackWardController.class.getName()).log(Level.SEVERE, "Erro ao remover histórico de backward", e);
-            return new ResponseEntity<>("Erro ao remover histórico de backward", HttpStatus.INTERNAL_SERVER_ERROR);
+            Logger.getLogger(ForWardController.class.getName()).log(Level.SEVERE, "Erro ao remover histórico de forward", e);
+            return new ResponseEntity<>("Erro ao remover histórico de forward", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
