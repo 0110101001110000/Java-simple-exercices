@@ -1,6 +1,8 @@
 
 package br.unit.stack_project.models;
 
+import org.hibernate.validator.constraints.URL;
+
 
 // Init -------------------------------------------------------------------- //
 
@@ -10,6 +12,7 @@ public class UrlDTO {
 
     // Attributes
 
+    @URL(message = "Url inválida")
     private String url;
 
 
