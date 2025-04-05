@@ -33,3 +33,4 @@ build/
 .vscode/
 
 ### Temporary ###
+src/main/**/db
