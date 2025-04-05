@@ -8,6 +8,9 @@ import br.unit.stack_project.models.UrlDTO;
 // Init -------------------------------------------------------------------- //
 
 
+/**
+ * @author 0110101001110000
+ */
 public class ForWardDAO {
 
 

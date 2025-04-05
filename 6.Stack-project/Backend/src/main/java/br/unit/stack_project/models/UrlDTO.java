@@ -9,6 +9,9 @@ import org.hibernate.validator.constraints.URL;
 // Init -------------------------------------------------------------------- //
 
 
+/**
+ * @author 0110101001110000
+ */
 public class UrlDTO {
 
 
