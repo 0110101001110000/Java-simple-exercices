@@ -17,7 +17,7 @@ public class UrlDTO {
 
     // Attributes
 
-    @NotNull(message = "Url não pode ser null")
+    @NotNull(message = "Url não pode ser nulo")
     @URL(message = "Url inválida")
     @NotEmpty(message = "Url não pode estar vazia")
     private String url;
@@ -32,8 +32,8 @@ public class UrlDTO {
 
     // Getter methods
 
-    public String getUrl() {
-        return url;
+    private String getUrl() {
+        return this.url;
     }
 
 
