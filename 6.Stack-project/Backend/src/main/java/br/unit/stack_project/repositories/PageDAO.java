@@ -29,11 +29,9 @@ public class PageDAO {
     }
 
     public PageDTO getPage(UrlDTO url) {
-        PageDTO interationPage;
-        for (int i = 0; i < database.size(); i++) {
-            interationPage = database.get(i);
-            if (interationPage.getUrl().equals(url)) {
-                return interationPage;
+        for (PageDTO page : database) {
+            if (page.getUrl().equals(url.getUrl())) {
+                return page;
             }
         }
         return null;
@@ -43,23 +41,25 @@ public class PageDAO {
         PageDTO interationPage;
         for (int i = 0; i < database.size(); i++) {
             interationPage = database.get(i);
-            if (interationPage.getUrl().equals(url)) {
+            if (interationPage.getUrl().equals(url.getUrl())) {
                 database.set(i, page);
                 return "A página foi atualizada";
             }
         }
-        return "Erro ao atualizar página. Erro: página não encontrada";
+        // return "Erro ao atualizar página. Erro: página não encontrada";
+        return null;
     }
 
     public String deletePage(UrlDTO url) {
         PageDTO interationPage;
         for (int i = 0; i < database.size(); i++) {
             interationPage = database.get(i);
-            if (interationPage.getUrl().equals(url)) {
+            if (interationPage.getUrl().equals(url.getUrl())) {
                 database.remove(i);
                 return "A página foi removida";
             }
         }
-        return "Erro ao remover página. Erro: página não encontrada";
+        // return "Erro ao remover página. Erro: página não encontrada";
+        return null;
     }
 }

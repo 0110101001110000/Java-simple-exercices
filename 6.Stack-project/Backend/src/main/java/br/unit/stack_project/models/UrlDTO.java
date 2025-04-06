@@ -32,7 +32,7 @@ public class UrlDTO {
 
     // Getter methods
 
-    private String getUrl() {
+    public String getUrl() {
         return this.url;
     }
 
