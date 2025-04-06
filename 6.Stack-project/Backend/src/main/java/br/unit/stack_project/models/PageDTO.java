@@ -30,7 +30,7 @@ public class PageDTO {
 
     // Getter methods
 
-    private UrlDTO getUrl() {
+    public UrlDTO getUrl() {
         return this.url;
     }
 

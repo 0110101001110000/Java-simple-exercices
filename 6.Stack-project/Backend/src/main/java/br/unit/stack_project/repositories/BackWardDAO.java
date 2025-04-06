@@ -31,7 +31,11 @@ public class BackWardDAO {
     }
 
     public String deleteElement() {
-        database.pop();
-        return "O Histórico de backward foi removido";
+        if (!database.isEmpty()) {
+            database.pop();
+            return "O Histórico de backward foi removido";
+        } else {
+            return "Erro ao remover histórico de backward. Erro: a base de dados está vazia";
+        }
     }
 }

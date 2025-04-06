@@ -31,7 +31,11 @@ public class ForWardDAO {
     }
 
     public String deleteElement() {
-        database.pop();
-        return "O Histórico de forward foi removido";
+        if (!database.isEmpty()) {
+            database.pop();
+            return "O Histórico de forward foi removido";
+        } else {
+            return "Erro ao remover histórico de forward. Erro: a base de dados está vazia";
+        }
     }
 }
