@@ -6,7 +6,7 @@ from browser import Browser
 # Init ---------------------------------------------------------------------- #
 
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
 
     root    = ttkb.Window()
     browser = Browser(root)
