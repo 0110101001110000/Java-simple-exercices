@@ -1,8 +1,8 @@
 
-import tkinter as tk
 import ttkbootstrap as ttkb
-import tkinter.font as tkFont
 from ttkbootstrap.constants import *
+from ttkbootstrap.scrolled import ScrolledText
+from ttkbootstrap.dialogs.dialogs import Messagebox
 
 
 # Init ---------------------------------------------------------------------- #
@@ -35,6 +35,23 @@ class Browser:
         self.BLACK_COLOR_1 = "#2b2a33"
         self.BLACK_COLOR_2 = "#42414d"
 
+        # Browser start page
+        self.START_PAGE = """
+
+Navegador - Gerenciamento de Dados
+
+
+Acesse seus dados com facilidade e eficiência!
+
+O Navegador é um navegador personalizado desenvolvido para gerenciar dados em uma estrutura de pilha. Com essa ferramenta, você pode criar, editar e excluir pilhas, além de adicionar e remover elementos delas.
+
+A estrutura de pilha é uma forma eficiente de organizar dados, pois permite a inserção e remoção de elementos em qualquer posição da pilha. Com o Navegador, você pode aproveitar essa vantagem para gerenciar seus dados de forma mais eficaz.
+
+O Navegador oferece uma interface simples e intuitiva, permitindo que você navegue facilmente pelas suas pilhas e execute as operações necessárias. Além disso, a ferramenta é segura e confiável, garantindo a integridade dos seus dados.
+
+Seja um profissional ou um usuário leigo, o Navegador é uma ferramenta essencial para qualquer pessoa que precisa gerenciar dados em uma estrutura de pilha. Experimente agora mesmo e descubra como podemos ajudar! 
+"""
+
 
         # Window
 
@@ -49,6 +66,7 @@ class Browser:
         # Root frame
 
         self.root.grid_columnconfigure(0, weight=1)
+        self.root.grid_rowconfigure(1, weight=1)
 
 
         # Header frame
@@ -106,4 +124,16 @@ class Browser:
 
         # Main frame
 
-        ...
+        self.main_frame = ttkb.Frame(self.root, style=DEFAULT)
+        self.main_frame.grid(row=1, column=0, padx=10, pady=10, sticky=NSEW)
+        self.main_frame.grid_rowconfigure(0, weight=1)
+        self.main_frame.grid_columnconfigure(0, weight=1)
+
+        self.page_text = ScrolledText(self.main_frame, wrap=WORD, autohide=YES, hbar=NO, bootstyle="round", font=(self.ARIAL_FONT, 16))
+        self.page_text.insert(END, self.START_PAGE)
+        self.page_text._text.configure(state='disabled')
+        self.page_text.grid(row=0, column=0, sticky=NSEW)
+
+
+        Messagebox.ok("", title="Ok message")
+
