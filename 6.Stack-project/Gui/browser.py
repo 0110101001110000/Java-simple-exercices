@@ -1,4 +1,5 @@
 
+import requests
 import ttkbootstrap as ttkb
 from ttkbootstrap.constants import *
 from ttkbootstrap.scrolled import ScrolledText
@@ -14,6 +15,9 @@ class Browser:
 
 
         # Constants
+
+        # Api
+        self.API_URL = "http://localhost:8080/api"
 
         # Main window
         self.WINDOW_TITLE     = "Browser"
@@ -35,32 +39,65 @@ class Browser:
         self.BLACK_COLOR_1 = "#2b2a33"
         self.BLACK_COLOR_2 = "#42414d"
 
-        # Browser start page
+        # Browser default pages
         self.START_PAGE = """
 
-Navegador - Gerenciamento de Dados
+BEM-VINDO AO SEU NAVIGADOR PERSONALIZADO!
 
 
-Acesse seus dados com facilidade e eficiência!
+O QUE É ISSO?
 
-O Navegador é um navegador personalizado desenvolvido para gerenciar dados em uma estrutura de pilha. Com essa ferramenta, você pode criar, editar e excluir pilhas, além de adicionar e remover elementos delas.
+Este é o seu navegador personalizado, criado com amor e cuidado usando Python e Ttkbootstrap. Sim, você leu bem, Python! A linguagem de programação que torna tudo mais fácil e divertido.
 
-A estrutura de pilha é uma forma eficiente de organizar dados, pois permite a inserção e remoção de elementos em qualquer posição da pilha. Com o Navegador, você pode aproveitar essa vantagem para gerenciar seus dados de forma mais eficaz.
+COMO FUNCIONA?
 
-O Navegador oferece uma interface simples e intuitiva, permitindo que você navegue facilmente pelas suas pilhas e execute as operações necessárias. Além disso, a ferramenta é segura e confiável, garantindo a integridade dos seus dados.
+Mas, por trás das cenas, há um backend poderoso feito em Java com SpringBoot, que armazena todo o seu histórico de visitas e páginas padrões. É como um detective que registra todos os seus passos na internet!
 
-Seja um profissional ou um usuário leigo, o Navegador é uma ferramenta essencial para qualquer pessoa que precisa gerenciar dados em uma estrutura de pilha. Experimente agora mesmo e descubra como podemos ajudar! 
+E O ARMazenAMENTO?
+
+Agora, aqui vem a parte mais interessante! O armazenamento é feito em uma estrutura de dados personalizada, criada por mim, baseada em uma pilha (estrutura de dados). Sim, você leu bem, uma pilha! É como uma torre de pratos, onde cada prato representa uma informação, e você pode adicionar ou remover pratos à medida que navega pela internet.
+
+COMO ISSO FUNCIONA NA PRÁTICA?
+
+Imagine que cada vez que você visita uma página, um novo prato é adicionado à pilha. Quando você volta para a página anterior, o prato é removido da pilha. É como se você estivesse criando um histórico de visitas em uma torre de pratos!
+
+O QUE VOCÊ PODE FAZER AQUI?
+
+    Navegar pela internet com estilo e personalidade
+    Visualizar seu histórico de visitas em uma torre de pratos (ou seja, a pilha de armazenamento)
+    Acessar páginas padrões personalizadas
+    E muito mais!
+
+OBRIGADO POR USAR NOSSO NAVIGADOR!
+
+Esperamos que você se divirta navegando pela internet com o nosso navegador personalizado. Se tiver alguma dúvida ou precisar de ajuda, não hesite em entrar em contato conosco.
+
+ATÉ LOGO!
+
+E lembre-se, com este navegador, você está sempre um passo à frente na internet!
+
+LINKS ÚTEIS
+
+    Não tem '-'
+
+REDENÇÃO DE CULPA
+
+Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos trabalhando constantemente para melhorar o nosso navegador. E se você tiver alguma sugestão, não hesite em nos contar!
 """
-
+        self.NOT_FOUND_PAGE = "http://notfound.com"
 
         # Window
-
         self.root = root
         self.root.title(self.WINDOW_TITLE)
         self.root.iconbitmap(self.WINDOW_ICON)
         self.root.minsize(*self.WINDOW_MIN_SIZE)
         self.root.maxsize(*self.WINDOW_MAX_SIZE)
         self.root.resizable(*self.WINDOW_RESIZABLE)
+
+
+        # Variables
+
+        self.current_page = "http://home.com"
 
 
         # Root frame
@@ -86,11 +123,11 @@ Seja um profissional ou um usuário leigo, o Navegador é uma ferramenta essenci
         self.history_btn_style.configure("history.light.TButton", font=(self.ARIAL_FONT, 14, "bold"), borderwidth=0)
 
         # History back ward button
-        self.back_ward_btn = ttkb.Button(self.history_frame, text="❮", style="history.light.TButton")
+        self.back_ward_btn = ttkb.Button(self.history_frame, text="❮", style="history.light.TButton", command=self.get_backward_history)
         self.back_ward_btn.grid(row=0, column=0, padx=5)
 
         # History for ward button
-        self.for_ward_btn = ttkb.Button(self.history_frame, text="❯", style="history.light.TButton")
+        self.for_ward_btn = ttkb.Button(self.history_frame, text="❯", style="history.light.TButton", command=self.get_forward_history)
         self.for_ward_btn.grid(row=0, column=1, padx=5)
 
         # Search bar frame
@@ -101,7 +138,6 @@ Seja um profissional ou um usuário leigo, o Navegador é uma ferramenta essenci
         # Search bar entry
         self.search_bar_entry = ttkb.Entry(self.search_bar_frame, style="light.TEntry", font=(self.ARIAL_FONT, 12))
         self.search_bar_entry.focus()
-        self.search_bar_entry.insert(0, "")
         self.search_bar_entry.grid(row=0, column=0, sticky=EW)
 
         # Search bar button style
@@ -109,7 +145,7 @@ Seja um profissional ou um usuário leigo, o Navegador é uma ferramenta essenci
         self.history_btn_style.configure("search_bar.light.TButton", font=(self.ARIAL_FONT, 14, "bold"), borderwidth=0)
 
         # Search bar button
-        self.search_bar_btn = ttkb.Button(self.search_bar_frame, text="🡢", style="search_bar.light.TButton")
+        self.search_bar_btn = ttkb.Button(self.search_bar_frame, text="🡢", style="search_bar.light.TButton", command=self.get_page)
         self.search_bar_btn.grid(row=0, column=1)
 
         # Header empty frame
@@ -135,5 +171,154 @@ Seja um profissional ou um usuário leigo, o Navegador é uma ferramenta essenci
         self.page_text.grid(row=0, column=0, sticky=NSEW)
 
 
-        Messagebox.ok("", title="Ok message")
+    # Main methods
 
+    def get_page(self):
+        data = {
+            "url": self.search_bar_entry.get()
+        }
+        try:
+            response = requests.get(self.API_URL + "/page", json=data)
+            if response.status_code == 200:
+                self.add_backward_history()
+                print("A página foi listada")
+                self.page_text._text.configure(state='normal')
+                self.page_text.delete("1.0", END)
+                self.page_text.insert(END, response.json()["htmlPage"])
+                self.page_text._text.configure(state='disabled')
+                self.current_page = response.json()["url"]
+            elif response.status_code == 404:
+                self.add_backward_history()
+                print("A página não foi listada, pois, ela não existe")
+
+                data = {
+                    "url": self.NOT_FOUND_PAGE
+                }
+                response = requests.get(self.API_URL + "/page", json=data)
+
+                self.page_text._text.configure(state='normal')
+                self.page_text.delete("1.0", END)
+                self.page_text.insert(END, response.json()["htmlPage"])
+                self.page_text._text.configure(state='disabled')
+                self.current_page = response.json()["url"]
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+    def add_backward_history(self):
+        data = {
+            "url": self.current_page
+        }
+        try:
+            response = requests.post(self.API_URL + "/backward", json=data)
+            if (response.status_code == 201) | (response.status_code == 200):
+                print("Foi adicionado um novo histórico de backward")
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+    def get_backward_history(self):
+        try:
+            response = requests.get(self.API_URL + "/backward")
+            if response.status_code == 200:
+                print("O Histórico de backward foi listado")
+                backward_page = response.json()["url"]
+                self.delete_backward_history()
+
+                data = {
+                    "url": backward_page
+                }
+                response = requests.get(self.API_URL + "/page", json=data)
+
+                self.add_forward_history()
+                print("A página foi listada")
+                self.page_text._text.configure(state='normal')
+                self.page_text.delete("1.0", END)
+                self.page_text.insert(END, response.json()["htmlPage"])
+                self.page_text._text.configure(state='disabled')
+                self.current_page = response.json()["url"]
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+    def delete_backward_history(self):
+        try:
+            response = requests.delete(self.API_URL + "/backward")
+            if response.status_code == 200:
+                print("O Histórico de backward foi removido")
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+    def add_forward_history(self):
+        data = {
+            "url": self.current_page
+        }
+        try:
+            response = requests.post(self.API_URL + "/forward", json=data)
+            if (response.status_code == 201) | (response.status_code == 200):
+                print("Foi adicionado um novo histórico de forward")
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+    def get_forward_history(self):
+        try:
+            response = requests.get(self.API_URL + "/forward")
+            if response.status_code == 200:
+                print("O Histórico de forward foi listado")
+                forward_page = response.json()["url"]
+                self.delete_forward_history()
+
+                data = {
+                    "url": forward_page
+                }
+                response = requests.get(self.API_URL + "/page", json=data)
+
+                self.add_backward_history()
+                print("A página foi listada")
+                self.page_text._text.configure(state='normal')
+                self.page_text.delete("1.0", END)
+                self.page_text.insert(END, response.json()["htmlPage"])
+                self.page_text._text.configure(state='disabled')
+                self.current_page = response.json()["url"]
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+    def delete_forward_history(self):
+        try:
+            response = requests.delete(self.API_URL + "/forward")
+            if response.status_code == 200:
+                print("O Histórico de forward foi removido")
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
