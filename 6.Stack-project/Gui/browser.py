@@ -40,50 +40,7 @@ class Browser:
         self.BLACK_COLOR_2 = "#42414d"
 
         # Browser default pages
-        self.START_PAGE = """
-
-BEM-VINDO AO SEU NAVIGADOR PERSONALIZADO!
-
-
-O QUE É ISSO?
-
-Este é o seu navegador personalizado, criado com amor e cuidado usando Python e Ttkbootstrap. Sim, você leu bem, Python! A linguagem de programação que torna tudo mais fácil e divertido.
-
-COMO FUNCIONA?
-
-Mas, por trás das cenas, há um backend poderoso feito em Java com SpringBoot, que armazena todo o seu histórico de visitas e páginas padrões. É como um detective que registra todos os seus passos na internet!
-
-E O ARMazenAMENTO?
-
-Agora, aqui vem a parte mais interessante! O armazenamento é feito em uma estrutura de dados personalizada, criada por mim, baseada em uma pilha (estrutura de dados). Sim, você leu bem, uma pilha! É como uma torre de pratos, onde cada prato representa uma informação, e você pode adicionar ou remover pratos à medida que navega pela internet.
-
-COMO ISSO FUNCIONA NA PRÁTICA?
-
-Imagine que cada vez que você visita uma página, um novo prato é adicionado à pilha. Quando você volta para a página anterior, o prato é removido da pilha. É como se você estivesse criando um histórico de visitas em uma torre de pratos!
-
-O QUE VOCÊ PODE FAZER AQUI?
-
-    Navegar pela internet com estilo e personalidade
-    Visualizar seu histórico de visitas em uma torre de pratos (ou seja, a pilha de armazenamento)
-    Acessar páginas padrões personalizadas
-    E muito mais!
-
-OBRIGADO POR USAR NOSSO NAVIGADOR!
-
-Esperamos que você se divirta navegando pela internet com o nosso navegador personalizado. Se tiver alguma dúvida ou precisar de ajuda, não hesite em entrar em contato conosco.
-
-ATÉ LOGO!
-
-E lembre-se, com este navegador, você está sempre um passo à frente na internet!
-
-LINKS ÚTEIS
-
-    Não tem '-'
-
-REDENÇÃO DE CULPA
-
-Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos trabalhando constantemente para melhorar o nosso navegador. E se você tiver alguma sugestão, não hesite em nos contar!
-"""
+        self.START_PAGE = "http://home.com"
         self.NOT_FOUND_PAGE = "http://notfound.com"
 
         # Window
@@ -166,12 +123,31 @@ Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos traba
         self.main_frame.grid_columnconfigure(0, weight=1)
 
         self.page_text = ScrolledText(self.main_frame, wrap=WORD, autohide=YES, hbar=NO, bootstyle="round", font=(self.ARIAL_FONT, 16))
-        self.page_text.insert(END, self.START_PAGE)
+        self.page_text.insert(END, self.get_page_html(self.START_PAGE))
+        self.update_search_bar_entry(self.START_PAGE)
         self.page_text._text.configure(state='disabled')
         self.page_text.grid(row=0, column=0, sticky=NSEW)
 
 
     # Main methods
+
+    def get_page_html(self, url: str):
+        data = {
+            "url": url
+        }
+        try:
+            response = requests.get(self.API_URL + "/page", json=data)
+            if response.status_code == 200:
+                return response.json()["htmlPage"]
+            elif response.status_code == 404:
+                return self.get_page_html(self.NOT_FOUND_PAGE)
+            else:
+                Messagebox.show_error(
+                    f"Status Code: {response.status_code}.",
+                    "Erro"
+                )
+        except Exception as e:
+            Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
 
     def get_page(self):
         data = {
@@ -187,20 +163,17 @@ Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos traba
                 self.page_text.insert(END, response.json()["htmlPage"])
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
+                self.update_search_bar_entry(data.get("url"))
+
             elif response.status_code == 404:
                 self.add_backward_history()
                 print("A página não foi listada, pois, ela não existe")
-
-                data = {
-                    "url": self.NOT_FOUND_PAGE
-                }
-                response = requests.get(self.API_URL + "/page", json=data)
-
                 self.page_text._text.configure(state='normal')
                 self.page_text.delete("1.0", END)
-                self.page_text.insert(END, response.json()["htmlPage"])
+                self.page_text.insert(END, self.get_page_html(self.NOT_FOUND_PAGE))
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
+                self.update_search_bar_entry(self.NOT_FOUND_PAGE)
             else:
                 Messagebox.show_error(
                     f"Status Code: {response.status_code}.",
@@ -245,6 +218,7 @@ Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos traba
                 self.page_text.insert(END, response.json()["htmlPage"])
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
+                self.update_search_bar_entry(data.get("url"))
             else:
                 Messagebox.show_error(
                     f"Status Code: {response.status_code}.",
@@ -302,6 +276,7 @@ Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos traba
                 self.page_text.insert(END, response.json()["htmlPage"])
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
+                self.update_search_bar_entry(data.get("url"))
             else:
                 Messagebox.show_error(
                     f"Status Code: {response.status_code}.",
@@ -322,3 +297,10 @@ Se você encontrar algum erro ou bug, por favor, não se preocupe! Estamos traba
                 )
         except Exception as e:
             Messagebox.show_error(f"Ocorreu um erro: {e}", "Erro")
+
+
+    # Other methods
+
+    def update_search_bar_entry(self, url: str):
+        self.search_bar_entry.delete(0, END)
+        self.search_bar_entry.insert(END, url)
