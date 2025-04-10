@@ -46,9 +46,13 @@ public class ForWardController {
     private ResponseEntity<UrlDTO> getElement() {
         try {
             UrlDTO response = forWardService.getElement();
-            UrlDTO url = (response != null) ? response : new UrlDTO(null);
-            Logger.getLogger(ForWardController.class.getName()).info("O Histórico de forward foi listado");
-            return new ResponseEntity<>(url, HttpStatus.OK);
+            if (response != null) {
+                Logger.getLogger(ForWardController.class.getName()).info("O Histórico de forward foi listado");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            Logger.getLogger(ForWardController.class.getName()).info("O Histórico de forward não foi listado, pois ele não existe");
+            UrlDTO nullUrl = new UrlDTO(null);
+            return new ResponseEntity<>(nullUrl, HttpStatus.NOT_FOUND);
         } catch (RuntimeException e) {
             Logger.getLogger(ForWardController.class.getName()).log(Level.SEVERE, "Erro ao listar histórico de forward", e);
             UrlDTO url = new UrlDTO(null);

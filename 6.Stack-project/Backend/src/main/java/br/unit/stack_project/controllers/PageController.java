@@ -52,7 +52,7 @@ public class PageController {
                 return new ResponseEntity<>(response, HttpStatus.OK);
             }
             PageDTO nullPage = new PageDTO(null, null);
-            Logger.getLogger(PageController.class.getName()).info("A página foi listada, pois, ela não existe");
+            Logger.getLogger(PageController.class.getName()).info("A página não foi listada, pois, ela não existe");
             return new ResponseEntity<>(nullPage, HttpStatus.NOT_FOUND);
         } catch (RuntimeException e) {
             Logger.getLogger(PageController.class.getName()).log(Level.SEVERE, "Erro ao listar página", e);

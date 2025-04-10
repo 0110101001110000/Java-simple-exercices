@@ -46,9 +46,13 @@ public class BackWardController {
     private ResponseEntity<UrlDTO> getElement() {
         try {
             UrlDTO response = backWardService.getElement();
-            UrlDTO url = (response != null) ? response : new UrlDTO(null);
+            if (response != null) {
+                Logger.getLogger(BackWardController.class.getName()).info("O Histórico de backward foi listado");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            UrlDTO nullUrl = new UrlDTO(null);
             Logger.getLogger(BackWardController.class.getName()).info("O Histórico de backward foi listado");
-            return new ResponseEntity<>(url, HttpStatus.OK);
+            return new ResponseEntity<>(nullUrl, HttpStatus.NOT_FOUND);
         } catch (RuntimeException e) {
             Logger.getLogger(BackWardController.class.getName()).log(Level.SEVERE, "Erro ao listar histórico de backward", e);
             UrlDTO url = new UrlDTO(null);
