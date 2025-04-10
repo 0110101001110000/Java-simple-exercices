@@ -164,7 +164,6 @@ class Browser:
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
                 self.update_search_bar_entry(data.get("url"))
-
             elif response.status_code == 404:
                 self.add_backward_history()
                 print("A página não foi listada, pois, ela não existe")
@@ -172,7 +171,7 @@ class Browser:
                 self.page_text.delete("1.0", END)
                 self.page_text.insert(END, self.get_page_html(self.NOT_FOUND_PAGE))
                 self.page_text._text.configure(state='disabled')
-                self.current_page = response.json()["url"]
+                self.current_page = self.NOT_FOUND_PAGE
                 self.update_search_bar_entry(self.NOT_FOUND_PAGE)
             else:
                 Messagebox.show_error(
@@ -219,6 +218,8 @@ class Browser:
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
                 self.update_search_bar_entry(data.get("url"))
+            elif response.status_code == 404:
+                print("O histórico de backward não foi exibido, pois, ele não existe")
             else:
                 Messagebox.show_error(
                     f"Status Code: {response.status_code}.",
@@ -277,6 +278,8 @@ class Browser:
                 self.page_text._text.configure(state='disabled')
                 self.current_page = response.json()["url"]
                 self.update_search_bar_entry(data.get("url"))
+            elif response.status_code == 404:
+                print("O histórico de forward não foi exibido, pois, ele não existe")
             else:
                 Messagebox.show_error(
                     f"Status Code: {response.status_code}.",
