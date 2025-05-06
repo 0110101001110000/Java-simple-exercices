@@ -17,6 +17,7 @@ public class User {
 
     private String name;
     private String password;
+    private boolean isEnabled;
 
 
     // Constructors
@@ -28,8 +29,9 @@ public class User {
      * @since 1.0
      */
     public User(String name, String password) {
-        setName(name);
-        setPassword(password);
+        this.setName(name);
+        this.setPassword(password);
+        this.setEnabled(true);
     }
 
 
@@ -39,10 +41,13 @@ public class User {
         return name;
     }
 
-    public String getPassword() {
+    private String getPassword() {
         return password;
     }
 
+    public boolean isEnabled() {
+        return isEnabled;
+    }
 
     // Setter methods
 
@@ -54,6 +59,9 @@ public class User {
         this.password = this.encryptPassword(password);
     }
 
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
 
     // Main methods
 
