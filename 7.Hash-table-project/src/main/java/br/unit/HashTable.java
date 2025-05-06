@@ -60,6 +60,8 @@ public class HashTable<T> {
     // Setter methods
 
     private void setSize(int size) {
+        this.notNegative(size);
+        if (size > this.getLength()) { throw new IllegalArgumentException("O 'size'(a) da tabela hash não pode ser maior que seu 'length'(P)"); }
         this.size = size;
     }
 
@@ -82,11 +84,53 @@ public class HashTable<T> {
         return (this.transform(string) % this.getLength());
     }
 
+    /**
+     * ...
+     * @return ...
+     * @since 1.0
+     */
+    public boolean isEmpty() {
+        return (this.getSize() == 0);
+    }
+
+    /**
+     * ...
+     * @return ...
+     * @since 1.0
+     */
+    public boolean isFull() {
+        return (this.getSize() == this.getLength());
+    }
+
+    /**
+     * ...
+     * @return ...
+     * @since 1.0
+     */
+    public float getLoadFactor() {
+        return (float) (this.getSize() / this.getLength());
+    }
+
+//    /**
+//     * ...
+//     * @param object ...
+//     * @return ...
+//     * @since 1.0
+//     */
+//    public int insert(T object) {
+//        int index = this.hash(object.getName());
+//    }
+
 
     // Validation methods
 
     private int validateLength(int length) {
+        this.notNegative(length);
         return length;
+    }
+
+    private void notNegative(float number) {
+        if (number < 0) { throw new IllegalArgumentException("O valor não pode ser negativo: menor que zero"); }
     }
 
     private void notNull(Object object) {
