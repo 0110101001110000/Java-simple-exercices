@@ -47,15 +47,11 @@ public class HashTable {
     // Getter methods
 
     private ListaSimples<User>[] getVector() {
-        return vector;
+        return this.vector;
     }
 
-    private int getLength() {
-        return length;
-    }
-
-    private int getSize() {
-        return size;
+    public int getLength() {
+        return this.length;
     }
 
 
@@ -175,6 +171,28 @@ public class HashTable {
         }
 
         return false;
+    }
+
+    /**
+     * ...
+     * @since 1.0
+     */
+    public void clear() {
+        for (int i = 0; i < this.getVector().length; i++) {
+            if (this.getVector()[i] != null) {
+                this.getVector()[i] = null;
+                this.setSize(this.getSize() - 1);
+            }
+        }
+    }
+
+    /**
+     * ...
+     * @return ...
+     * @since 1.0
+     */
+    public int getSize() {
+        return size;
     }
 
 

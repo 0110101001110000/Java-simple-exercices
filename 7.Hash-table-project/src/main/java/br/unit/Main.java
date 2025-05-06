@@ -18,26 +18,40 @@ public class Main {
         // Some simple tests
 
         HashTable hashTable = new HashTable(10);
+        System.out.println("\n" + hashTable.getLength());
+        System.out.println(hashTable.getSize());
 
         User user1 = new User("Pietro Katbush", "asdf");
         User user2 = new User("Pietra Katbush", "asdf");
         User user3 = new User("Pietra Katbush", "123456");
+        User user4 = new User("Pie Katbush", "asd321");
 
         hashTable.insert(user1);
         hashTable.insert(user2);
         hashTable.insert(user3);
 
+        System.out.println("\n" + hashTable.getSize());
+
         System.out.println("\n" + hashTable.search(user1));
         System.out.println(hashTable.search(user2));
         System.out.println(hashTable.search(user3));
+        System.out.println(hashTable.search(user4));
+
+        hashTable.clear();
+        System.out.println("\n" + hashTable.isEmpty());
+
+        hashTable.insert(user4);
 
         System.out.println("\n" + hashTable.delete(user1));
         System.out.println(hashTable.delete(user2));
         System.out.println(hashTable.delete(user3));
 
+        System.out.println("\n" + hashTable.getSize());
+
         System.out.println("\n" + hashTable.search(user1));
         System.out.println(hashTable.search(user2));
         System.out.println(hashTable.search(user3));
+        System.out.println(hashTable.search(user4));
 
         System.out.println("\n" + hashTable.isEmpty());
         System.out.println(hashTable.isFull());
