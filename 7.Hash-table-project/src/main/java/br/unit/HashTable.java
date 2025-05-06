@@ -10,12 +10,12 @@ package br.unit;
  * @author 01101010-01110000
  * @since 1.0
  */
-public class HashTable<T> {
+public class HashTable {
 
 
     // Attributes
 
-    private final ListaDuplamenteEncadeada<T>[] vector;
+    private final ListaSimples<User>[] vector;
     private final int length;
     private int size;
 
@@ -32,19 +32,21 @@ public class HashTable<T> {
 
     /**
      * ...
-     * @param length
+     * @param length ...
      * @since 1.0
      */
     public HashTable(int length) {
+        this.onlyPositive(length);
+
         this.setSize(0);
-        this.length = this.validateLength(length);
-        this.vector = new ListaDuplamenteEncadeada[getLength()];
+        this.length = length;
+        this.vector = new ListaSimples[getLength()];
     }
 
 
     // Getter methods
 
-    private ListaDuplamenteEncadeada<T>[] getVector() {
+    private ListaSimples<User>[] getVector() {
         return vector;
     }
 
@@ -68,20 +70,22 @@ public class HashTable<T> {
 
     // Main methods
 
-    private int transform(String string) {
-        this.notNull(string);
-        this.notBlank(string);
+    private int transform(User user) {
+        String userName = user.getName();
+
+        this.notNull(userName);
+        this.notBlank(userName);
 
         int stringNumber = 0;
-        for (char letter : string.toCharArray()) {
+        for (char letter : userName.toCharArray()) {
             stringNumber = (stringNumber * 128 + letter) % this.getLength();
         }
 
         return stringNumber;
     }
 
-    private int hash(String string) {
-        return (this.transform(string) % this.getLength());
+    private int hash(User user) {
+        return (this.transform(user) % this.getLength());
     }
 
     /**
@@ -108,25 +112,76 @@ public class HashTable<T> {
      * @since 1.0
      */
     public float getLoadFactor() {
-        return (float) (this.getSize() / this.getLength());
+        return ((float) this.getSize() / this.getLength());
     }
 
-//    /**
-//     * ...
-//     * @param object ...
-//     * @return ...
-//     * @since 1.0
-//     */
-//    public int insert(T object) {
-//        int index = this.hash(object.getName());
-//    }
+    /**
+     * ...
+     * @param user ...
+     * @return ...
+     * @since 1.0
+     */
+    public int insert(User user) {
+        int index = this.hash(user);
+
+        if (this.isFull()) { throw new RuntimeException("A tabela hash está cheia"); }
+
+        if (this.getVector()[index] == null) {
+            this.getVector()[index] = new ListaSimples<>(user);
+            this.setSize(this.getSize() + 1);
+        } else {
+            this.getVector()[index].adicionaFim(user);
+        }
+
+        return index;
+    }
+
+    /**
+     * ...
+     * @param user ...
+     * @return ...
+     * @since 1.0
+     */
+    public int search(User user) {
+        int index = this.hash(user);
+
+        if (this.getVector()[index] != null) {
+            int userPosition = this.getVector()[index].recuperaIndexDado(user);
+            if (userPosition != -1) {
+                if (this.getVector()[index].recupera(userPosition).isEnabled()) {
+                    return index;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    /**
+     * ...
+     * @param user ...
+     * @return ...
+     * @since 1.0
+     */
+    public boolean delete(User user) {
+        int index = this.hash(user);
+
+        if (this.getVector()[index] != null) {
+            int userPosition = this.getVector()[index].recuperaIndexDado(user);
+            if (userPosition != -1) {
+                this.getVector()[index].recupera(userPosition).setEnabled(false);
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 
     // Validation methods
 
-    private int validateLength(int length) {
-        this.notNegative(length);
-        return length;
+    private void onlyPositive(float number) {
+        if (number < 1) { throw new IllegalArgumentException("O valor deve ser positivo: maior que zero"); }
     }
 
     private void notNegative(float number) {
