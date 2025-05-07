@@ -6,7 +6,7 @@ package br.unit;
 
 
 /**
- * ...
+ * Implementa um usuário simples com nome, senha e status (Ativo/Inativo).
  * @author 01101010-01110000
  * @since 1.0
  */
@@ -23,9 +23,9 @@ public class User {
     // Constructors
 
     /**
-     * ...
-     * @param name
-     * @param password
+     * Usuário é criado com nome e senha personalizados
+     * @param name nome do usuário
+     * @param password senha do usuário
      * @since 1.0
      */
     public User(String name, String password) {
@@ -56,22 +56,10 @@ public class User {
     }
 
     private void setPassword(String password) {
-        this.password = this.encryptPassword(password);
+        this.password = password;
     }
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
-
-    // Main methods
-
-    private String encryptPassword(String password) {
-        return password; // TO-DO
-    }
-
-
-    // Other methods
-
-    // ...
-
 }

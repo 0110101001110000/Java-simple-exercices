@@ -6,7 +6,8 @@ package br.unit;
 
 
 /**
- * ...
+ * Implementa uma estrutura de dados de Tabela Hash, onde os elementos são adicionados e removidos de um vetor, sua posição (index) no vetor é definida atravéz do hash do nome do usuário.
+ * Na abordagem, os usuários são armazenados em uma estrutura de dados Encadeada (ListaSimplesmenteEncadeada) para evitar colisões.
  * @author 01101010-01110000
  * @since 1.0
  */
@@ -23,7 +24,7 @@ public class HashTable {
     // Constructors
 
     /**
-     * ...
+     * Tabela hash é criada e iniciada como vazia e com length padrão de 701
      * @since 1.0
      */
     public HashTable() {
@@ -31,8 +32,8 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @param length ...
+     * Tabela hash é criada e iniciada como vazia e com length personalizado
+     * @param length tamanho do vetor da tabela hash
      * @since 1.0
      */
     public HashTable(int length) {
@@ -85,8 +86,8 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @return ...
+     * Retorna true se a tabela hash está vazia; false caso contrário
+     * @return true se a tabela está vazia, false caso contrário
      * @since 1.0
      */
     public boolean isEmpty() {
@@ -94,8 +95,8 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @return ...
+     * Retorna true se a tabela hash está cheia; false caso contrário
+     * @return true se a tabela hash está cheia, false caso contrário
      * @since 1.0
      */
     public boolean isFull() {
@@ -103,8 +104,8 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @return ...
+     * Retorna o fator de carga da tabela hash
+     * @return o fator de carga da tabela hash
      * @since 1.0
      */
     public float getLoadFactor() {
@@ -112,9 +113,9 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @param user ...
-     * @return ...
+     * Insere o usuário na tabela, retornando a posição onde ele foi inserido
+     * @param user o usuário que será inserido na tabela
+     * @return a posição onde o usuário foi inserido
      * @since 1.0
      */
     public int insert(User user) {
@@ -133,9 +134,9 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @param user ...
-     * @return ...
+     * Retorna a posição onde o usuário se encontra ou -1 caso não o encontre
+     * @param user o usuário que será procurado na tabela
+     * @return a posição onde o usuário se encontra ou -1 caso não o encontre
      * @since 1.0
      */
     public int search(User user) {
@@ -154,9 +155,9 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @param user ...
-     * @return ...
+     * O usuário é removido, retornando true se ele estava na tabela e false caso contrário
+     * @param user o usuário que será removido da tabela
+     * @return true se o usuário estava na tabela e false caso contrário
      * @since 1.0
      */
     public boolean delete(User user) {
@@ -174,7 +175,7 @@ public class HashTable {
     }
 
     /**
-     * ...
+     * Todos os itens da tabela são descartados e ela torna-se uma tabela hash vazia
      * @since 1.0
      */
     public void clear() {
@@ -187,8 +188,8 @@ public class HashTable {
     }
 
     /**
-     * ...
-     * @return ...
+     * Retorna o número de elementos em uso na tabela hash
+     * @return o número de elementos em uso na tabela hash
      * @since 1.0
      */
     public int getSize() {
@@ -213,10 +214,4 @@ public class HashTable {
     private void notBlank(String string) {
         if (string.isBlank()) { throw new IllegalArgumentException("A string não pode ser vazia: '', ' '"); }
     }
-
-
-    // Other methods
-
-    // ...
-
 }
