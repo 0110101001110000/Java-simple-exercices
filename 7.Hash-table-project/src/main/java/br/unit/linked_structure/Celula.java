@@ -1,4 +1,4 @@
-package br.unit;
+package br.unit.linked_structure;
 
 /**
  * Classe desenvolvida por Jackson

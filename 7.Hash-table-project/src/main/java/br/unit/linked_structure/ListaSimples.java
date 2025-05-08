@@ -1,5 +1,7 @@
 
-package br.unit;
+package br.unit.linked_structure;
+
+import java.util.ArrayList;
 
 
 // Init -------------------------------------------------------------------- //
@@ -134,28 +136,24 @@ public class ListaSimples<T> {
     /**
      * @author 01101010-01110000
      */
-    public int recuperaIndexDado(T elemento) {
+    public ArrayList<T> recuperaTodos() {
+        ArrayList<T> arrayList = new ArrayList<>();
 
         if (this.tamanho == 0) {
 
             System.out.println("A lista está vazia!!");
+            return null;
 
         } else {
 
-            Iterador iterador = new Iterador(this.inicio);
-            int index = 0;
-            while (iterador.hasNext()) {
-                Celula atual = iterador.getAtual();
-                if (atual.getElemento().equals(elemento)) {
-                    return index;
-                }
-                iterador.next();
-                index++;
+            Iterador it = new Iterador(this.inicio);
+            while (it.hasNext()) {
+                arrayList.add((T) it.getAtual().getElemento());
+                it.next();
             }
 
+            return arrayList;
         }
-
-        return -1;
     }
 
     public T recupera(int posicao) {

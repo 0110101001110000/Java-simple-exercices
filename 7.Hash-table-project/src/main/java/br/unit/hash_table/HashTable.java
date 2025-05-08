@@ -1,5 +1,10 @@
 
-package br.unit;
+package br.unit.hash_table;
+
+import br.unit.models.User;
+import br.unit.linked_structure.ListaSimples;
+
+import java.util.ArrayList;
 
 
 // Init -------------------------------------------------------------------- //
@@ -67,22 +72,20 @@ public class HashTable {
 
     // Main methods
 
-    private int transform(User user) {
-        String userName = user.getName();
-
-        this.notNull(userName);
-        this.notBlank(userName);
+    private int transform(String key) {
+        this.notNull(key);
+        this.notBlank(key);
 
         int stringNumber = 0;
-        for (char letter : userName.toCharArray()) {
+        for (char letter : key.toCharArray()) {
             stringNumber = (stringNumber * 128 + letter) % this.getLength();
         }
 
         return stringNumber;
     }
 
-    private int hash(User user) {
-        return (this.transform(user) % this.getLength());
+    private int hash(String key) {
+        return (this.transform(key) % this.getLength());
     }
 
     /**
@@ -116,36 +119,36 @@ public class HashTable {
      * Insere o usuário na tabela, retornando a posição onde ele foi inserido
      * @param user o usuário que será inserido na tabela
      * @return a posição onde o usuário foi inserido
+     * @throws RuntimeException caso a tabela esteja completamente preenchida
      * @since 1.0
      */
     public int insert(User user) {
-        int index = this.hash(user);
+        int index = this.hash(user.getName());
 
         if (this.isFull()) { throw new RuntimeException("A tabela hash está cheia"); }
 
-        if (this.getVector()[index] == null) {
-            this.getVector()[index] = new ListaSimples<>(user);
-            this.setSize(this.getSize() + 1);
-        } else {
+        if (this.getVector()[index] != null) {
             this.getVector()[index].adicionaFim(user);
         }
+        this.getVector()[index] = new ListaSimples<>(user);
+        this.setSize(this.getSize() + 1);
 
         return index;
     }
 
     /**
      * Retorna a posição onde o usuário se encontra ou -1 caso não o encontre
-     * @param user o usuário que será procurado na tabela
+     * @param key o usuário que será procurado na tabela
      * @return a posição onde o usuário se encontra ou -1 caso não o encontre
      * @since 1.0
      */
-    public int search(User user) {
-        int index = this.hash(user);
+    public int search(String key) {
+        int index = this.hash(key);
 
         if (this.getVector()[index] != null) {
-            int userPosition = this.getVector()[index].recuperaIndexDado(user);
-            if (userPosition != -1) {
-                if (this.getVector()[index].recupera(userPosition).isEnabled()) {
+            ArrayList<User> users = this.getVector()[index].recuperaTodos();
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getName().equals(key) && users.get(i).isEnabled()) {
                     return index;
                 }
             }
@@ -155,19 +158,42 @@ public class HashTable {
     }
 
     /**
+     * Retorna o elemento armazenado na estrutura encadeada caso o encontre ou null caso contrário
+     * @param key o usuário que será procurado na tabela
+     * @return o elemento caso o encontre ou null caso contrário
+     * @since 1.0
+     */
+    public User getElement(String key) {
+        int index = this.hash(key);
+
+        if (this.getVector()[index] != null) {
+            ArrayList<User> users = this.getVector()[index].recuperaTodos();
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getName().equals(key) && users.get(i).isEnabled()) {
+                    return users.get(i);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * O usuário é removido, retornando true se ele estava na tabela e false caso contrário
-     * @param user o usuário que será removido da tabela
+     * @param key o usuário que será removido da tabela
      * @return true se o usuário estava na tabela e false caso contrário
      * @since 1.0
      */
-    public boolean delete(User user) {
-        int index = this.hash(user);
+    public boolean delete(String key) {
+        int index = this.hash(key);
 
         if (this.getVector()[index] != null) {
-            int userPosition = this.getVector()[index].recuperaIndexDado(user);
-            if (userPosition != -1) {
-                this.getVector()[index].recupera(userPosition).setEnabled(false);
-                return true;
+            ArrayList<User> users = this.getVector()[index].recuperaTodos();
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getName().equals(key) && (this.getVector()[index].recupera(i).isEnabled())) {
+                    this.getVector()[index].recupera(i).setEnabled(false);
+                    return true;
+                }
             }
         }
 
