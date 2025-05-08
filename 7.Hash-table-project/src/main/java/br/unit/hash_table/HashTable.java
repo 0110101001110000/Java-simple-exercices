@@ -129,9 +129,10 @@ public class HashTable {
 
         if (this.getVector()[index] != null) {
             this.getVector()[index].adicionaFim(user);
+        } else {
+            this.getVector()[index] = new ListaSimples<>(user);
+            this.setSize(this.getSize() + 1);
         }
-        this.getVector()[index] = new ListaSimples<>(user);
-        this.setSize(this.getSize() + 1);
 
         return index;
     }
