@@ -1,6 +1,8 @@
 
 package br.unit.models;
 
+import br.unit.hash_table.HashTableEntity;
+
 
 // Init -------------------------------------------------------------------- //
 
@@ -10,7 +12,7 @@ package br.unit.models;
  * @author 01101010-01110000
  * @since 1.0
  */
-public class User {
+public class User implements HashTableEntity {
 
 
     // Attributes
@@ -37,6 +39,7 @@ public class User {
 
     // Getter methods
 
+    @Override
     public String getName() {
         return name;
     }
