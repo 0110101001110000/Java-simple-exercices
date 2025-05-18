@@ -1,17 +1,64 @@
+
 package br.unit;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.io.File;
+import java.util.Scanner;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+
+// Init -------------------------------------------------------------------- //
+
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        // Global constants
+        final String    documentPath      = "src/main/java/br/unit/temp.txt";
+        final int       amountOfCompanies = 1000000;
+        final Company[] companiesVector   = new Company[amountOfCompanies];
+
+        // Global variables
+        boolean documentReaderLoop = true;
+
+        // Read document
+        try {
+            final File    document        = new File(documentPath);
+            final Scanner documentScanner = new Scanner(document);
+            final String  separator       = " [|] ";
+
+            for (int companyIndex = 0; companyIndex < amountOfCompanies; companyIndex++) {
+                if (documentScanner.hasNext()) {
+                    String   companyRow       = documentScanner.nextLine(); 
+                    String[] companyCols      = companyRow.split(separator);
+                    String   companyName      = companyCols[0];
+                    String   companyRegNum    = companyCols[1];
+                    String   companyMarkValue = companyCols[2];
+                    double   doubComMarkValue = (!companyMarkValue.isBlank()) ? Double.parseDouble(companyMarkValue) : null;
+                    Company  currentCompany   = new Company(companyName, companyRegNum, doubComMarkValue);
+                    companiesVector[companyIndex] = currentCompany;
+                }
+                else {
+                    break;
+                }
+            }
+
+            for (Company company : companiesVector) {
+                if (company != null) {
+                    System.out.printf(
+                            "Name: %s, RegistrationNumber: %s, MarketValue: %.2f\n",
+                            company.name(), company.registrationNumber(), company.marketValue()
+                    );
+                }
+            }
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
+    
+    /*
+    private static String[] treatCompanyVector(String[] companyCols) {
+
+    }
+    */
 }
