@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Global constants
-        final String    documentPath      = "src/main/java/br/unit/temp.txt";
+        final String    documentPath      = "src/main/java/br/unit/Empresas_BubbleSort.txt";
         final int       amountOfCompanies = 1000000;
         final Company[] companiesVector   = new Company[amountOfCompanies];
 
@@ -41,6 +41,16 @@ public class Main {
                     break;
                 }
             }
+
+            int totalEmpresasLidas = 0;
+            for (Company company : companiesVector) {
+                if (company != null) totalEmpresasLidas++;
+                else{
+                    break;
+                }
+            }
+
+            BubbleSort.Ordenar(companiesVector, totalEmpresasLidas);
 
             for (Company company : companiesVector) {
                 if (company != null) {
