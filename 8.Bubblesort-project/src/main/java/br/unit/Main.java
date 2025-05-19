@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 
 /**
- * ...
+ * Classe principal para o processo de leitura, ordenação e exibição de informações sobre as empresas.
  * @since 1.0
  */
 public class Main {
