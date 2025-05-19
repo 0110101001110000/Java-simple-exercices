@@ -15,6 +15,12 @@ import java.util.Scanner;
  */
 public class Main {
 
+
+    /**
+     * Método principal que inicia o processo.
+     * @param args Argumentos da linha de comando
+     * @since 1.0
+     */
     public static void main(String[] args) {
 
         // Global constants
