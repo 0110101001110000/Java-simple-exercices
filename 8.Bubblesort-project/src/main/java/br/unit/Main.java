@@ -27,10 +27,10 @@ public class Main {
         // ...
 
         // Read companies from file
-        System.out.println("# ---------- # Etapa 1: processamento das empresas # ---------- #");
         File    document;
         Scanner documentScanner;
         try {
+            System.out.println("# ---------- # Etapa 1: processamento das empresas # ---------- #");
             System.out.printf("\nProcessando conteúdo do arquivo %s ...\n", documentPath);
 
             document        = new File(documentPath);

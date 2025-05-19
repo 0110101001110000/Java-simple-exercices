@@ -30,11 +30,13 @@ public class CompanyProcessor {
         ArrayList<Company> list = new ArrayList<>();
 
         while (documentScanner.hasNext()) {
-            String   companyRow  = documentScanner.nextLine();
-            String[] companyCols = companyRow.split(separator);
+            String   companyRow     = documentScanner.nextLine();
+            String[] companyCols    = companyRow.split(separator);
+            boolean  companyIsValid = false;
 
             try {
                 validateCompanyColumns(companyCols);
+                companyIsValid = true;
             }
             catch (NullPointerException | IllegalArgumentException exception) {
                 System.err.printf("Ocorreu um erro ao validar a empresa: %s\n", exception);
@@ -43,12 +45,14 @@ public class CompanyProcessor {
                 throw new RuntimeException("Ocorreu uma exceção: ", exception);
             }
 
-            String  companyName      = companyCols[0];
-            String  companyRegNum    = companyCols[1];
-            double  companyMarkValue = Double.parseDouble(companyCols[2]);
-            Company currentCompany   = new Company(companyName, companyRegNum, companyMarkValue);
+            if (companyIsValid) {
+                String  companyName      = companyCols[0];
+                String  companyRegNum    = companyCols[1];
+                double  companyMarkValue = Double.parseDouble(companyCols[2]);
+                Company currentCompany   = new Company(companyName, companyRegNum, companyMarkValue);
 
-            list.add(currentCompany);
+                list.add(currentCompany);
+            }
         }
 
         return list.toArray(new Company[0]);
