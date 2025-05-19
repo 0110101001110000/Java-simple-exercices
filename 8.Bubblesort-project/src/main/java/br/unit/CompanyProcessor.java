@@ -10,20 +10,22 @@ import java.util.Scanner;
 
 
 /**
- * ...
+ * Classe responsável por processar as empresas obtidas a partir de um arquivo de texto.
  * @author 01101010-01110000
  * @since 1.0
  */
-public class CompanyProcessor {
+public abstract class CompanyProcessor {
 
 
     // Main methods
 
     /**
-     * ...
-     * @param documentScanner ...
-     * @param separator ...
-     * @return ...
+     * Processa as linhas de um arquivo texto contendo informações de empresas, validando cada uma e retornando um array de objetos Company.
+     * Observação importante: linhas inválidas são ignoradas e não são adicionadas ao resultado final.
+     * @param documentScanner Objeto Scanner que contém o conteúdo do arquivo de texto.
+     * @param separator String que representa o padrão de separação entre as colunas de cada linha. Exemplo: ",".
+     * @return Array contendo todos os objetos Company válidos encontrados no arquivo.
+     * @throws RuntimeException caso ocorra uma exceção inesperada.
      * @since 1.0
      */
     public static Company[] processCompanies(Scanner documentScanner, String separator) {

@@ -23,9 +23,6 @@ public class Main {
         final int       amountOfCompanies;
         final Company[] companiesVector;
 
-        // Global variables
-        // ...
-
         // Read companies from file
         File    document;
         Scanner documentScanner;
