@@ -52,5 +52,17 @@ public class Main {
             documentScanner = null;
             System.out.println("# ---------- # Fim da etapa 1 # ---------- #");
         }
+
+        // Sorting companies
+        BubbleSort.Ordenar(companiesVector, amountOfCompanies);
+
+        for (Company company : companiesVector) {
+            if (company != null) {
+                System.out.printf(
+                        "Name: %s, RegistrationNumber: %s, MarketValue: %.2f\n",
+                        company.name(), company.registrationNumber(), company.marketValue()
+                );
+            }
+        }
     }
 }
