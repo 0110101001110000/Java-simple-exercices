@@ -3,6 +3,7 @@ package br.unit;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.Vector;
@@ -61,7 +62,7 @@ public class Main {
      * @since 1.0
      */
     private static Company[] readCompanies(Scanner documentScanner, String separator) {
-        Vector<Company> vector = new Vector<>();
+        ArrayList<Company> list = new ArrayList<>();
 
         while (documentScanner.hasNext()) {
             String   companyRow  = documentScanner.nextLine();
@@ -82,15 +83,10 @@ public class Main {
             double  companyMarkValue = Double.parseDouble(companyCols[2]);
             Company currentCompany   = new Company(companyName, companyRegNum, companyMarkValue);
 
-            vector.add(currentCompany);
+            list.add(currentCompany);
         }
 
-        try {
-            return vector.toArray(new Company[0]);
-        }
-        catch (ClassCastException exception) {
-            throw new RuntimeException("Ocorreu um erro ao converter o vetor de empresas para um array java: ", exception);
-        }
+        return list.toArray(new Company[0]);
     }
 
     /**
