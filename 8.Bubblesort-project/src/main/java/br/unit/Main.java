@@ -30,7 +30,7 @@ public class Main {
         File    document;
         Scanner documentScanner;
         try {
-            System.out.println("# ---------- # Etapa 1: processamento das empresas # ---------- #");
+            System.out.println("\n# ---------- # Etapa 1: processamento das empresas # ---------- #");
             System.out.printf("\nProcessando conteúdo do arquivo %s ...\n", documentPath);
 
             document        = new File(documentPath);
@@ -39,7 +39,7 @@ public class Main {
             companiesVector   = CompanyProcessor.processCompanies(documentScanner, separator);
             amountOfCompanies = companiesVector.length;
 
-            System.out.printf("%d empresas foram processadas.\n\n", amountOfCompanies);
+            System.out.printf("%d empresas foram processadas.\n", amountOfCompanies);
         }
         catch (FileNotFoundException exception) {
             throw new RuntimeException(String.format("Arquivo não encontrado %s", documentPath), exception);
@@ -50,11 +50,13 @@ public class Main {
         finally {
             document        = null;
             documentScanner = null;
-            System.out.println("# ---------- # Fim da etapa 1 # ---------- #");
+            System.out.println("\n# ---------- # Fim da etapa 1 # ---------- #");
         }
 
         // Sorting companies
+        System.out.println("\n# ---------- # Etapa 2: Ordenação # ---------- #\n");
         BubbleSort.Ordenar(companiesVector, amountOfCompanies);
+        System.out.println("\n# ---------- # Fim da etapa 2 # ---------- #\n");
 
         for (Company company : companiesVector) {
             if (company != null) {
