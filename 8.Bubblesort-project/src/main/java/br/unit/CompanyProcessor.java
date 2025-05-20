@@ -14,7 +14,7 @@ import java.util.Scanner;
  * @author 01101010-01110000
  * @since 1.0
  */
-public abstract class CompanyProcessor {
+public class CompanyProcessor {
 
 
     // Main methods
