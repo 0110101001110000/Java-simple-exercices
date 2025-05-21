@@ -2,6 +2,7 @@
 package br.unit;
 
 import br.unit.entities.RaceLapEntity;
+import br.unit.entities.insertSort;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -52,11 +53,22 @@ public class Main {
         }
         logger.info(String.format("Resultado do processamento: %s", stringBuilder));
 
-        // <NOME DA ETAPA AQUI>
+        // <Ordenação das voltas pelo tempo e nome do piloto>
 
-        logger.info("# ---------- # Etapa 2: <NOME DA ETAPA AQUI> # ---------- #");
-        // <CÓDIGO AQUI>
+        logger.info("# ---------- # Etapa 2: < Ordenar as voltas pelo tempo e nome do piloto> # ---------- #");
+        RaceLapEntity[] lapsArray = raceLapEntities.toArray(new RaceLapEntity[0]);
+        insertSort sorter = new insertSort();
+        sorter.Ordenar(lapsArray, lapsArray.length);
+
         logger.info("# ---------- # Fim da etapa 2 # ---------- #");
+
+        StringBuilder sortedResult = new StringBuilder();
+        for (RaceLapEntity entity : lapsArray) {
+            sortedResult.append(String.format("\n  %s%s%s%s%s%s%s",
+                    entity.date(), separator, entity.driverName(), separator, entity.team(), separator, entity.duration())
+            );
+        }
+        logger.info(String.format("Resultado após ordenação: %s", sortedResult));
 
 
         // <NOME DA ETAPA AQUI>
@@ -64,14 +76,6 @@ public class Main {
         logger.info("# ---------- # Etapa 3: <NOME DA ETAPA AQUI> # ---------- #");
         // <CÓDIGO AQUI>
         logger.info("# ---------- # Fim da etapa 3 # ---------- #");
-
-
-
-        //TESTE
-        RaceLapEntity lap1 = new RaceLapEntity("2025-10-05 10:23:33", "Leonardo Almeida", "Leonardo Almeida", "02:19:718");
-        int millis = TempoDeVolta(lap1);
-        System.out.println("Teste" + lap1.duration() + " = " + millis + " ms");{
-        }
     }
 
     //converte corretamente o tempo de volta do formato "MM:SS:MMM" para o total de milissegundos.
