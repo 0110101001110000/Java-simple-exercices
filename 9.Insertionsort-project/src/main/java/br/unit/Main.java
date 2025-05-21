@@ -1,6 +1,9 @@
 
 package br.unit;
 
+import br.unit.entities.RaceLapEntity;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -16,25 +19,47 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         // Global Constants
+
         final String dataPath       = "src/main/java/br/unit/data";
         final String inputFilePath  = String.format("%s/temp-input.txt", dataPath);
         final String outputFilePath = String.format("%s/temp-output.txt", dataPath);
         final String separator      = " - ";
         final Logger logger         = Logger.getLogger(Main.class.getName());
 
+        final ArrayList<RaceLapEntity> raceLapEntities = new ArrayList<>();
+
+
         // Data pre-processing
+
         logger.info("# ---------- # Etapa 1: pre-processamento do arquivo # ---------- #");
-        String resultToPrint = Arrays.deepToString(new FilePreProcessor(inputFilePath, separator).process());
+
+        String[][] processedEntitiesMatrix = new FilePreProcessor(inputFilePath, separator).process();
+
+        for (String[] entity : processedEntitiesMatrix) {
+            raceLapEntities.add(new RaceLapEntity(entity[0], entity[1], entity[2], entity[3]));
+        }
+
         logger.info("# ---------- # Fim da etapa 1 # ---------- #");
-        logger.info(String.format("Resultado do processamento: %s", resultToPrint));
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (RaceLapEntity entity : raceLapEntities.toArray(new RaceLapEntity[0])) {
+            stringBuilder.append(String.format("\n  %s%s%s%s%s%s%s",
+                    entity.date(), separator, entity.driverName(), separator, entity.team(), separator, entity.duration())
+            );
+        }
+        logger.info(String.format("Resultado do processamento: %s", stringBuilder));
 
         // <NOME DA ETAPA AQUI>
+
         logger.info("# ---------- # Etapa 2: <NOME DA ETAPA AQUI> # ---------- #");
         // <CÓDIGO AQUI>
         logger.info("# ---------- # Fim da etapa 2 # ---------- #");
 
+
         // <NOME DA ETAPA AQUI>
+
         logger.info("# ---------- # Etapa 3: <NOME DA ETAPA AQUI> # ---------- #");
         // <CÓDIGO AQUI>
         logger.info("# ---------- # Fim da etapa 3 # ---------- #");
