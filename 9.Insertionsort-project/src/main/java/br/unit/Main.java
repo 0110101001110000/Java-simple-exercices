@@ -23,6 +23,7 @@ public class Main {
         final String separator      = " - ";
         final Logger logger         = Logger.getLogger(Main.class.getName());
 
-        System.out.println(Arrays.deepToString(new FilePreProcessor(inputFilePath, separator).process()));
+        String resultToPrint = Arrays.deepToString(new FilePreProcessor(inputFilePath, separator).process());
+        logger.info(String.format("Resultado do processamento: %s", resultToPrint));
     }
 }
