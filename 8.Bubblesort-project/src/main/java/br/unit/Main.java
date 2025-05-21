@@ -26,7 +26,7 @@ public class Main {
     public static void main(String[] args) {
 
         // Global constants
-        final String    documentPath = "src/main/java/br/unit/temp.txt";
+        final String    documentPath = "src/main/java/br/unit/Empresas_BubbleSort.txt";
         final String    separator    = " [|] ";
         final int       amountOfCompanies;
         final Company[] companiesVector;
