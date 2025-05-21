@@ -1,6 +1,8 @@
 
 package br.unit;
 
+import java.util.logging.Logger;
+
 
 // Init -------------------------------------------------------------------- //
 
@@ -13,6 +15,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Hello, World!");
+        // Global Constants
+        final String dataPath       = "src/main/java/br/unit/data";
+        final String inputFilePath  = String.format("%s/temp-input.txt", dataPath);
+        final String outputFilePath = String.format("%s/temp-output.txt", dataPath);
+        final String separator      = " - ";
+        final Logger logger         = Logger.getLogger(Main.class.getName());
+
+        
     }
 }
