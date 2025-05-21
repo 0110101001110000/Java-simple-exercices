@@ -1,6 +1,7 @@
 
 package br.unit;
 
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 
@@ -22,6 +23,6 @@ public class Main {
         final String separator      = " - ";
         final Logger logger         = Logger.getLogger(Main.class.getName());
 
-        
+        System.out.println(Arrays.deepToString(new FilePreProcessor(inputFilePath, separator).process()));
     }
 }
