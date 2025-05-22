@@ -1,7 +1,7 @@
 
 package br.unit.hash_table;
 
-import br.unit.models.User;
+import br.unit.models.HashTableEntity;
 import br.unit.linked_structure.ListaSimples;
 
 import java.util.ArrayList;
@@ -11,19 +11,19 @@ import java.util.ArrayList;
 
 
 /**
- * Implementa uma estrutura de dados de Tabela Hash, onde os elementos são adicionados e removidos de um vetor, sua posição (index) no vetor é definida atravéz do hash do nome do usuário.
- * Na abordagem, os usuários são armazenados em uma estrutura de dados Encadeada (ListaSimplesmenteEncadeada) para evitar colisões.
+ * Implementa uma estrutura de dados de Tabela Hash, onde os elementos são adicionados e removidos de um vetor, sua posição (index) no vetor é definida através do hash da key.
+ * Na abordagem, a HashTableEntity é armazenada numa estrutura de dados Encadeada (ListaSimplesmenteEncadeada) para evitar colisões.
  * @author 01101010-01110000
  * @since 1.0
  */
-public class HashTable {
+public class HashTable<Key, Value> {
 
 
     // Attributes
 
-    private final ListaSimples<User>[] vector;
+    private final ListaSimples<HashTableEntity<Key, Value>>[] vector;
     private final int length;
-    private int size;
+    private       int size;
 
 
     // Constructors
@@ -52,7 +52,7 @@ public class HashTable {
 
     // Getter methods
 
-    private ListaSimples<User>[] getVector() {
+    private ListaSimples<HashTableEntity<Key, Value>>[] getVector() {
         return this.vector;
     }
 
@@ -72,20 +72,8 @@ public class HashTable {
 
     // Main methods
 
-    private int transform(String key) {
-        this.notNull(key);
-        this.notBlank(key);
-
-        int stringNumber = 0;
-        for (char letter : key.toCharArray()) {
-            stringNumber = (stringNumber * 128 + letter) % this.getLength();
-        }
-
-        return stringNumber;
-    }
-
-    private int hash(String key) {
-        return (this.transform(key) % this.getLength());
+    private int hash(Key key) {
+        return (Math.abs(key.hashCode()) % this.getLength());
     }
 
     /**
@@ -116,21 +104,21 @@ public class HashTable {
     }
 
     /**
-     * Insere o usuário na tabela, retornando a posição onde ele foi inserido
-     * @param user o usuário que será inserido na tabela
-     * @return a posição onde o usuário foi inserido
+     * Insere o elemento na tabela, retornando a posição onde ele foi inserido
+     * @param entity o elemento que será inserido na tabela
+     * @return a posição onde o elemento foi inserido
      * @throws RuntimeException caso a tabela esteja completamente preenchida
      * @since 1.0
      */
-    public int insert(User user) {
-        int index = this.hash(user.getName());
+    public int insert(HashTableEntity<Key, Value> entity) {
+        int index = this.hash(entity.getKey());
 
         if (this.isFull()) { throw new RuntimeException("A tabela hash está cheia"); }
 
         if (this.getVector()[index] != null) {
-            this.getVector()[index].adicionaFim(user);
+            this.getVector()[index].adicionaFim(entity);
         } else {
-            this.getVector()[index] = new ListaSimples<>(user);
+            this.getVector()[index] = new ListaSimples<>(entity);
             this.setSize(this.getSize() + 1);
         }
 
@@ -138,18 +126,18 @@ public class HashTable {
     }
 
     /**
-     * Retorna a posição onde o usuário se encontra ou -1 caso não o encontre
-     * @param key o usuário que será procurado na tabela
-     * @return a posição onde o usuário se encontra ou -1 caso não o encontre
+     * Retorna a posição onde o elemento se encontra ou -1 caso não o encontre
+     * @param key a chave primária do elemento que será procurado na tabela
+     * @return a posição onde o elemento se encontra ou -1 caso não o encontre
      * @since 1.0
      */
-    public int search(String key) {
+    public int search(Key key) {
         int index = this.hash(key);
 
         if (this.getVector()[index] != null) {
-            ArrayList<User> users = this.getVector()[index].recuperaTodos();
-            for (int i = 0; i < users.size(); i++) {
-                if (users.get(i).getName().equals(key) && users.get(i).isEnabled()) {
+            ArrayList<HashTableEntity<Key, Value>> users = this.getVector()[index].recuperaTodos();
+            for (HashTableEntity<Key, Value> user : users) {
+                if (user.getKey().equals(key) && user.isEnabled()) {
                     return index;
                 }
             }
@@ -160,18 +148,18 @@ public class HashTable {
 
     /**
      * Retorna o elemento armazenado na estrutura encadeada caso o encontre ou null caso contrário
-     * @param key o usuário que será procurado na tabela
+     * @param key a chave primária do elemento que será procurado na tabela
      * @return o elemento caso o encontre ou null caso contrário
      * @since 1.0
      */
-    public User getElement(String key) {
+    public HashTableEntity<Key, Value> getElement(Key key) {
         int index = this.hash(key);
 
         if (this.getVector()[index] != null) {
-            ArrayList<User> users = this.getVector()[index].recuperaTodos();
-            for (int i = 0; i < users.size(); i++) {
-                if (users.get(i).getName().equals(key) && users.get(i).isEnabled()) {
-                    return users.get(i);
+            ArrayList<HashTableEntity<Key, Value>> users = this.getVector()[index].recuperaTodos();
+            for (HashTableEntity<Key, Value> user : users) {
+                if (user.getKey().equals(key) && user.isEnabled()) {
+                    return user;
                 }
             }
         }
@@ -180,18 +168,18 @@ public class HashTable {
     }
 
     /**
-     * O usuário é removido, retornando true se ele estava na tabela e false caso contrário
-     * @param key o usuário que será removido da tabela
-     * @return true se o usuário estava na tabela e false caso contrário
+     * O elemento é removido, retornando true se ele estava na tabela e false caso contrário
+     * @param key a chave primária do elemento que será removido da tabela
+     * @return true se o elemento estava na tabela e false caso contrário
      * @since 1.0
      */
-    public boolean delete(String key) {
+    public boolean delete(Key key) {
         int index = this.hash(key);
 
         if (this.getVector()[index] != null) {
-            ArrayList<User> users = this.getVector()[index].recuperaTodos();
+            ArrayList<HashTableEntity<Key, Value>> users = this.getVector()[index].recuperaTodos();
             for (int i = 0; i < users.size(); i++) {
-                if (users.get(i).getName().equals(key) && (this.getVector()[index].recupera(i).isEnabled())) {
+                if (users.get(i).getKey().equals(key) && (this.getVector()[index].recupera(i).isEnabled())) {
                     this.getVector()[index].recupera(i).setEnabled(false);
                     return true;
                 }

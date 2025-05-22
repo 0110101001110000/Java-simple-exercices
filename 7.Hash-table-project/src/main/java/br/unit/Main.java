@@ -19,7 +19,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        HashTable hashTable = new HashTable(10);
+        HashTable<String, String> hashTable = new HashTable<>(10);
         Scanner scannerEscolha = new Scanner(System.in);
         int opcao;
         boolean continuar = true;
@@ -41,7 +41,7 @@ public class Main {
                     String nomeUsuario = scannerUsuario.nextLine();
                     System.out.print("Informe uma senha segura para cadastro. \n -------> ");
                     String senhaUsuario = scannerUsuario.nextLine();
-                    System.out.println(hashTable.insert(new User(nomeUsuario, senhaUsuario)));
+                    System.out.println(hashTable.insert(new HashTableEntity<>(nomeUsuario, senhaUsuario)));
                     System.out.println("Usuário cadastrado com sucesso. ");
                     break;
 
@@ -72,9 +72,9 @@ public class Main {
                     String usuarioLogin = scannerUsuario.nextLine();
                     System.out.print("Informe a senha. \n -------> ");
                     String senhaLogin = scannerUsuario.nextLine();
-                    User userToComparer = hashTable.getElement(usuarioLogin);
+                    HashTableEntity<String, String> userToComparer = hashTable.getElement(usuarioLogin);
                     if (userToComparer != null) {
-                        if (userToComparer.getPassword().equals(senhaLogin)) {
+                        if (userToComparer.getValue().equals(senhaLogin)) {
                             System.out.println("Login efetuado com sucesso ");
                         } else {
                             System.out.println("Verifique suas credenciais, nome de usuário ou senha estão incorretos. ");
@@ -84,6 +84,8 @@ public class Main {
                     }
                     break;
                 case 5:
+                    continuar = false;
+                    System.out.println("Encerrando o sistema, tenha um bom dia ...");
                     break;
             }
         }

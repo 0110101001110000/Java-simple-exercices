@@ -1,68 +1,55 @@
 
 package br.unit.models;
 
-import br.unit.hash_table.HashTableEntity;
-
 
 // Init -------------------------------------------------------------------- //
 
 
-/**
- * Implementa um usuário simples com nome, senha e status (Ativo/Inativo).
- * @author 01101010-01110000
- * @since 1.0
- */
-public class User implements HashTableEntity {
+public class HashTableEntity<Key, Value> {
 
 
     // Attributes
 
-    private String name;
-    private String password;
-    private boolean isEnabled;
+    private Key     key;
+    private Value   value;
+    private boolean enabled;
 
 
     // Constructors
 
-    /**
-     * Usuário é criado com nome e senha personalizados
-     * @param name nome do usuário
-     * @param password senha do usuário
-     * @since 1.0
-     */
-    public User(String name, String password) {
-        this.setName(name);
-        this.setPassword(password);
-        this.setEnabled(true);
+    public HashTableEntity(Key key, Value value) {
+        setKey(key);
+        setValue(value);
+        setEnabled(true);
     }
 
 
     // Getter methods
 
-    @Override
-    public String getName() {
-        return name;
+    public Key getKey() {
+        return key;
     }
 
-    private String getPassword() {
-        return password;
+    public Value getValue() {
+        return value;
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
+
 
     // Setter methods
 
-    private void setName(String name) {
-        this.name = name;
+    public void setKey(Key key) {
+        this.key = key;
     }
 
-    private void setPassword(String password) {
-        this.password = password;
+    public void setValue(Value value) {
+        this.value = value;
     }
 
     public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+        this.enabled = enabled;
     }
 }
