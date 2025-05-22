@@ -23,7 +23,7 @@ public class Main {
         // Global Constants
 
         final String dataPath       = "src/main/java/br/unit/data";
-        final String inputFilePath  = String.format("%s/temp-input.txt", dataPath);
+        final String inputFilePath  = String.format("%s/formula1-insertionsort.txt", dataPath);
         final String outputFilePath = String.format("%s/temp-output.txt", dataPath);
         final String separator      = " - ";
         final Logger logger         = Logger.getLogger(Main.class.getName());
@@ -38,6 +38,10 @@ public class Main {
         String[][] processedEntitiesMatrix = new FilePreProcessor(inputFilePath, separator).process();
 
         for (String[] entity : processedEntitiesMatrix) {
+            if (entity.length != 4) {
+                logger.severe(String.format("Ocorreu um erro ao validar o vetor das colunas da linha do arquivo. Erro: a coluna do vetor não pode ter tamanho diferente de 4. Vetor inválido: %s", Arrays.toString(entity)));
+                throw new IndexOutOfBoundsException("A coluna do vetor não pode ter tamanho diferente de 4");
+            }
             raceLapEntities.add(new RaceLapEntity(entity[0], entity[1], entity[2], entity[3]));
         }
 

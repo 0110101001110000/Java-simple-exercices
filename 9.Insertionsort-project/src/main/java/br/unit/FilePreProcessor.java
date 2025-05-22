@@ -106,9 +106,4 @@ public class FilePreProcessor {
             throw new NullPointerException(message);
         }
     }
-
-
-    // Util methods
-
-    // ...
 }
