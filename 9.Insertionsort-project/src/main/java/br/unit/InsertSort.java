@@ -6,10 +6,10 @@
  * @since 1.0
  */
 
-package br.unit.entities;
-import br.unit.Main;
+package br.unit;
+import br.unit.entities.RaceLapEntity;
 
-public class insertSort {
+public class InsertSort {
     public void Ordenar(RaceLapEntity[] vet, int n) {
         int j;
         RaceLapEntity tmp;

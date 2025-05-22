@@ -2,7 +2,6 @@
 package br.unit;
 
 import br.unit.entities.RaceLapEntity;
-import br.unit.entities.insertSort;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class Main {
 
         logger.info("# ---------- # Etapa 2: < Ordenar as voltas pelo tempo e nome do piloto> # ---------- #");
         RaceLapEntity[] lapsArray = raceLapEntities.toArray(new RaceLapEntity[0]);
-        insertSort sorter = new insertSort();
+        InsertSort sorter = new InsertSort();
         sorter.Ordenar(lapsArray, lapsArray.length);
 
         logger.info("# ---------- # Fim da etapa 2 # ---------- #");
