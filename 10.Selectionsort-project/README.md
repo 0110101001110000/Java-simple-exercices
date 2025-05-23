@@ -2,8 +2,9 @@
 
 # Selection Sort Project
 
+O projeto implementa o algoritmo Selection Sort para classificar os registros presente em um arquivo de texto com base no número da matrícula de cada aluno em ordem crescente, visando facilitar a análise e o planejamento estratégico da Universidade. Após a ordenação, o produto grava os registros ordenados em um novo arquivo de texto.
 
-...
+O arquivo de texto fornecido contém informações sobre 200.000 registros com as informações dos alunos matriculados. Cada registro possui cinco campos: matrícula, data da matrícula, data de nascimento, nome completo e curso de cada aluno.
 
 **Tecnologias:**
 
