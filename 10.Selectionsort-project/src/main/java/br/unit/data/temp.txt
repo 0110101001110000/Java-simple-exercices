@@ -1,0 +1,10 @@
+10000000187756 | 05/03/2019 | Thales Correia | 29/09/1995 | Enfermagem
+10000000119309 | 31/12/2015 | Srta. Maria Cecília Azevedo | 07/11/2001 | Direito
+10000000162744 | 27/08/2024 | Isabel Costela | 23/07/1986 | Matemática
+10000000196042 | 06/09/2022 | Heloisa Mendes | 22/07/2000 | Enfermagem
+10000000073854 | 13/11/2019 | Vinicius Silveira | 05/06/1996 | Ciência da Computação
+10000000127831 | 06/09/2017 | Dra. Anna Liz Moura | 02/11/1980 | Engenharia Civil
+10000000066522 | 16/03/2019 | Bernardo Mendonça | 23/09/1987 | Engenharia Civil
+10000000022130 | 13/04/2025 | Dr. João Felipe Pereira | 28/08/1991 | Matemática
+10000000036010 | 21/10/2019 | Sr. José Borges | 09/03/1982 | Administração
+10000000007371 | 11/04/2016 | Dr. João Guilherme Martins | 12/06/1994 | Engenharia de Software
