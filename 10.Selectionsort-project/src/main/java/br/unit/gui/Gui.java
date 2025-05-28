@@ -149,7 +149,7 @@ public class Gui extends JFrame {
         this.add(centerJPanel, BorderLayout.CENTER);
 
         this.setVisible(true);
-        this.show();
+        //this.show();
     }
 
 
@@ -166,10 +166,14 @@ public class Gui extends JFrame {
                         outputFilePathField.getText(),
                         separatorField.getText()
                 ));
-                Main.setInputFilePath(inputFilePathField.getText());
-                Main.setOutputFilePath(outputFilePathField.getText());
-                Main.setSeparator(separatorField.getText());
-                Main.processFile();
+                try {
+                    Main.setInputFilePath(inputFilePathField.getText());
+                    Main.setOutputFilePath(outputFilePathField.getText());
+                    Main.setSeparator(separatorField.getText());
+                    Main.processFile();
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(null, "Ocorreu um erro inesperado. Tente novamente.", "Ocorreu um Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
