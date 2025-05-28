@@ -1,7 +1,8 @@
 
 package br.unit;
 
-import java.util.ArrayList;
+import br.unit.gui.Gui;
+
 import java.util.logging.Logger;
 
 
@@ -14,18 +15,56 @@ import java.util.logging.Logger;
  */
 public class Main {
 
+
+    // Attributes
+
+    private final String DATA_PATH = String.format("%s/src/main/java/br/unit/data", System.getProperty("user.dir"));
+    private final Logger LOGGER    = Logger.getLogger(Main.class.getName());
+
+    private static String inputFilePath;
+    private static String outputFilePath;
+    private static String separator;
+
+
+    // Constructors
+
+    public Main() {}
+
+
+    // Getter methods
+
+    public static String getInputFilePath() {
+        return inputFilePath;
+    }
+
+    public static String getOutputFilePath() {
+        return outputFilePath;
+    }
+
+    public static String getSeparator() {
+        return separator;
+    }
+
+
+    // Setter methods
+
+    public static void setInputFilePath(String inputFilePath) {
+        Main.inputFilePath = inputFilePath;
+    }
+
+    public static void setOutputFilePath(String outputFilePath) {
+        Main.outputFilePath = outputFilePath;
+    }
+
+    public static void setSeparator(String separator) {
+        Main.separator = separator;
+    }
+
+
+    // Main methods
+
     public static void main(String[] args) {
 
-
-        // Global Constants
-
-        final String DATA_PATH        = String.format("%s/src/main/java/br/unit/data", System.getProperty("user.dir"));
-        final String INPUT_FILE_PATH  = String.format("%s/temp.txt", DATA_PATH);
-        final String OUTPUT_FILE_PATH = String.format("%s/temp-output.txt", DATA_PATH);
-        final String SEPARATOR        = " - ";
-        final Logger LOGGER           = Logger.getLogger(Main.class.getName());
-
-        //final ArrayList<...> ENTITIES_LIST = new ...<>();
-        
+        new Gui();
     }
 }
