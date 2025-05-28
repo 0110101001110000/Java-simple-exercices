@@ -14,7 +14,8 @@ import java.util.logging.Logger;
 
 
 /**
- * ...
+ * Classe Main, ponto de entrada principal da aplicação.
+ * Inicia a interface gráfica e realiza processamento do arquivo especificado.
  * @since 1.0
  */
 public class Main {
@@ -33,6 +34,10 @@ public class Main {
 
     // Constructors
 
+    /**
+     * Construtor padrão da classe Main.
+     * @since 1.0
+     */
     public Main() {}
 
 
@@ -68,11 +73,20 @@ public class Main {
 
     // Main methods
 
+    /**
+     * Método principal de entrada da aplicação.
+     * Inicia a interface gráfica (Gui).
+     * @since 1.0
+     */
     public static void main(String[] args) {
 
         new Gui();
     }
 
+    /**
+     * Processa um arquivo de entrada conforme os parâmetros configurados, validando e convertendo os dados em objetos StudentEntity.
+     * @since 1.0
+     */
     public static void processFile() {
         LOGGER.info("Iniciando processamento do arquivo fornecido");
 

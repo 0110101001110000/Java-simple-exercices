@@ -14,7 +14,8 @@ import java.util.logging.Logger;
 
 
 /**
- * ...
+ * Classe Gui responsável por criar a interface gráfica do usuário.
+ * Fornece campos de entrada para caminho do arquivo, separador e caminho de saída, além de um botão para processar os dados.
  * @author 01101010-01110000
  * @since 1.0
  */
@@ -33,6 +34,11 @@ public class Gui extends JFrame {
 
     // Constructors
 
+    /**
+     * Construtor da classe Gui.
+     * Inicializa os componentes da interface gráfica, define o layout e adiciona os listeners.
+     * @since 1.0
+     */
     public Gui() throws HeadlessException {
         LOGGER.info("Aplicando configurações iniciais");
 
@@ -157,6 +163,12 @@ public class Gui extends JFrame {
 
     private class ButtonHandler implements ActionListener {
 
+        /**
+         * Método responsável por lidar com o clique do botão de envio.
+         * Recupera os valores dos campos de entrada e os envia para processamento.
+         * @param e Evento do clique do botão.
+         * @since 1.0
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == submitButton) {

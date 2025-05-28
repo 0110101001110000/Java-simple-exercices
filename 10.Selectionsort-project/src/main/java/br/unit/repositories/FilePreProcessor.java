@@ -13,7 +13,8 @@ import java.util.logging.Logger;
 
 
 /**
- * ...
+ * Processa arquivo externo e transforma os dados em uma matriz de strings.
+ * É responsável por ler o arquivo, separar os dados de acordo com o separador informado e validar as colunas resultantes.
  * @author 01101010-01110000
  * @since 1.0
  */
@@ -30,7 +31,10 @@ public class FilePreProcessor {
     // Constructors
 
     /**
-     * ...
+     * Inicializa um novo processador de arquivos.
+     * @param filePath Caminho do arquivo a ser processado
+     * @param separator Caractere(s) separador das colunas
+     * @throws NullPointerException Se algum dos parâmetros for nulo
      * @since 1.0
      */
     public FilePreProcessor(String filePath, String separator) {
@@ -47,6 +51,11 @@ public class FilePreProcessor {
 
     // Main methods
 
+    /**
+     * Executa o pré-processamento do arquivo e retorna os dados em formato de matriz.
+     * @return Matriz de strings contendo os dados processados
+     * @since 1.0
+     */
     public String[][] process() {
         logger.info(String.format("Iniciando pre-processamento do arquivo '%s'", filePath));
 
