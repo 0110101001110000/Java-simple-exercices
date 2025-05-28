@@ -1,8 +1,12 @@
 
 package br.unit.gui;
 
+import br.unit.Main;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
 
 
@@ -21,14 +25,10 @@ public class Gui extends JFrame {
 
     private final Logger LOGGER = Logger.getLogger(Gui.class.getName());
 
-    private String inputFilePath;
-    private String outputFilePath;
-    private String separator;
-
-    private JTextField inputFilePathField;
-    private JTextField outputFilePathField;
-    private JTextField separatorField;
-    private JButton    submitButton;
+    private final JTextField inputFilePathField;
+    private final JTextField outputFilePathField;
+    private final JTextField separatorField;
+    private final JButton    submitButton;
 
 
     // Constructors
@@ -103,33 +103,6 @@ public class Gui extends JFrame {
 
         // Form content
 
-        /*LOGGER.info("Adicionando entradas de texto e botão do formulário");
-
-        entriesJPanel.setLayout(new GridLayout(4, 0, 0, 10));
-
-        JPanel inputFieldPanel     = new JPanel(new FlowLayout());
-        JPanel outputFieldPanel    = new JPanel(new FlowLayout());
-        JPanel separatorFieldPanel = new JPanel(new FlowLayout());
-        JPanel submitButtonPanel   = new JPanel(new FlowLayout());
-
-        inputFieldPanel.setBackground(backgroundColor);
-        outputFieldPanel.setBackground(backgroundColor);
-
-        inputFieldPanel.setPreferredSize(new Dimension(100, 100));
-        outputFieldPanel.setPreferredSize(new Dimension(100, 100));
-
-        inputFilePathField = new JTextField();
-        outputFilePathField = new JTextField();
-
-        inputFilePathField.setPreferredSize(new Dimension(350, 38));
-        outputFilePathField.setPreferredSize(new Dimension(350, 38));
-
-        inputFilePathField.setText("Input File Path");
-        outputFilePathField.setText("Output File Path");*/
-
-
-        // Form content
-
         LOGGER.info("Adicionando entradas de texto e botão do formulário");
 
         entriesJPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -149,6 +122,8 @@ public class Gui extends JFrame {
         outputFilePathField.setText("Output File Path");
         separatorField.setText("Separator");
         submitButton.setText("Submit");
+
+        submitButton.addActionListener(new ButtonHandler());
 
 
         // Add all panels
@@ -178,12 +153,24 @@ public class Gui extends JFrame {
     }
 
 
-    // Methods
-
-    // ...
-
-
     // Classes
 
+    private class ButtonHandler implements ActionListener {
 
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == submitButton) {
+                LOGGER.info(String.format(
+                        "Textos recebidos:\n  InputFilePath: %s\n  OutputFilePath: %s\n  Separator: %s",
+                        inputFilePathField.getText(),
+                        outputFilePathField.getText(),
+                        separatorField.getText()
+                ));
+                Main.setInputFilePath(inputFilePathField.getText());
+                Main.setOutputFilePath(outputFilePathField.getText());
+                Main.setSeparator(separatorField.getText());
+                Main.processFile();
+            }
+        }
+    }
 }

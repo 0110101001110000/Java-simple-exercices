@@ -18,8 +18,7 @@ public class Main {
 
     // Attributes
 
-    private final String DATA_PATH = String.format("%s/src/main/java/br/unit/data", System.getProperty("user.dir"));
-    private final Logger LOGGER    = Logger.getLogger(Main.class.getName());
+    private static final Logger LOGGER    = Logger.getLogger(Main.class.getName());
 
     private static String inputFilePath;
     private static String outputFilePath;
@@ -66,5 +65,9 @@ public class Main {
     public static void main(String[] args) {
 
         new Gui();
+    }
+
+    public static void processFile() {
+        LOGGER.info("Processando arquivo");
     }
 }
