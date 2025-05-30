@@ -37,7 +37,6 @@ public class ClientController {
 
     @GetMapping("/{email}")
     public ResponseEntity<Client> getClientByEmail(@PathVariable String email) {
-        logger.info("Recived email:" + email);
         try {
             Client response = clientService.getClientByEmail(email);
 

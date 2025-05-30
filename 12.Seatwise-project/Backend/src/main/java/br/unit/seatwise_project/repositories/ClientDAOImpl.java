@@ -33,7 +33,7 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public Client getClientByEmail(String email) throws IOException {
-        for (String row : database.readRecords()) {
+        for (String row : this.database.readRecords()) {
             String[] cols = row.split(",");
             String userId = cols[0];
             String userEmail = cols[1];
@@ -48,8 +48,8 @@ public class ClientDAOImpl implements ClientDAO {
 
     @Override
     public String saveClient(Client client) throws IOException {
-        client.setId(database.generateNextId());
-        database.createRecord(String.format("%d,%s,%s", client.getId(), client.getEmail(), client.getPassword()));
+        client.setId(this.database.generateNextId());
+        this.database.createRecord(String.format("%d,%s,%s", client.getId(), client.getEmail(), client.getPassword()));
         return "Usuário criado com sucesso";
     }
 }
