@@ -48,7 +48,7 @@ public class ClientController {
             logger.info("Cliente não encontrado");
             return new ResponseEntity<>(this.nullClient, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            logger.log(Level.SEVERE,"Erro ao obter cliente", e);
+            logger.log(Level.SEVERE,"Erro interno ao obter cliente", e);
             return new ResponseEntity<>(this.nullClient, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -60,8 +60,8 @@ public class ClientController {
             logger.info(response);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            String message = "Erro ao adicionar cliente";
-            logger.log(Level.SEVERE,message, e);
+            String message = "Erro interno ao adicionar cliente";
+            logger.log(Level.SEVERE, message, e);
             return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

@@ -12,5 +12,5 @@ import java.io.IOException;
 public interface ClientService {
 
     Client getClientByEmail(String email) throws IOException;
-    String saveClient(Client client) throws IOException;
+    String saveClient(Client client)      throws IOException;
 }

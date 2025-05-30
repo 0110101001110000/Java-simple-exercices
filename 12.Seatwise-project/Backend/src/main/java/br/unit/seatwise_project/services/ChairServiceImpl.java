@@ -34,11 +34,11 @@ public class ChairServiceImpl implements ChairService {
 
     @Override
     public List<Chair> getAllChairs() throws IOException {
-        return chairDAO.getAllChairs();
+        return this.chairDAO.getAllChairs();
     }
 
     @Override
     public String saveChair(Chair chair) throws IOException {
-        return chairDAO.saveChair(chair);
+        return this.chairDAO.saveChair(chair);
     }
 }

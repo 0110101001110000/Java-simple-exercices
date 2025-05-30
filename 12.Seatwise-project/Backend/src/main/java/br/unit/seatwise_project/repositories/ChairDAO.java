@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ChairDAO {
 
-    List<Chair> getAllChairs() throws IOException;
-    String saveChair(Chair chair) throws IOException;
+    List<Chair> getAllChairs()         throws IOException;
+    String      saveChair(Chair chair) throws IOException;
 }
 

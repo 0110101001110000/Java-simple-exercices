@@ -12,6 +12,6 @@ import java.util.List;
 
 public interface ChairService {
 
-    List<Chair> getAllChairs() throws IOException;
-    String saveChair(Chair chair) throws IOException;
+    List<Chair> getAllChairs()         throws IOException;
+    String      saveChair(Chair chair) throws IOException;
 }

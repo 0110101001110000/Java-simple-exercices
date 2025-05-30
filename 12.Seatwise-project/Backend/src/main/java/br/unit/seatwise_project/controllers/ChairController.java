@@ -51,7 +51,7 @@ public class ChairController {
             logger.info("Cadeiras não encontradas");
             return new ResponseEntity<>(nullChairs, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            logger.log(Level.SEVERE,"Erro ao obter cadeiras", e);
+            logger.log(Level.SEVERE,"Erro interno ao obter cadeiras", e);
             return new ResponseEntity<>(nullChairs, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -63,8 +63,8 @@ public class ChairController {
             logger.info(response);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            String message = "Erro ao adicionar cadeira";
-            logger.log(Level.SEVERE,message, e);
+            String message = "Erro interno ao adicionar cadeira";
+            logger.log(Level.SEVERE, message, e);
             return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

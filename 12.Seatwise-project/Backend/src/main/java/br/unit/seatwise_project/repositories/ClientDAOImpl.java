@@ -34,13 +34,13 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public Client getClientByEmail(String email) throws IOException {
         for (String row : this.database.readRecords()) {
-            String[] cols = row.split(",");
-            String userId = cols[0];
-            String userEmail = cols[1];
-            String userPassword = cols[2];
+            String[] cols         = row.split(",");
+            Long     userId       = Long.parseLong(cols[0]);
+            String   userEmail    = cols[1];
+            String   userPassword = cols[2];
 
             if (email.equals(userEmail)) {
-                return new Client(Long.parseLong(userId), userEmail, userPassword);
+                return new Client(userId, userEmail, userPassword);
             }
         }
         return null;

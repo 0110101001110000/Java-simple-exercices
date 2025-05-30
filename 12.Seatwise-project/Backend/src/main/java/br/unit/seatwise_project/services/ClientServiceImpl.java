@@ -33,11 +33,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client getClientByEmail(String email) throws IOException {
-        return clientDAO.getClientByEmail(email);
+        return this.clientDAO.getClientByEmail(email);
     }
 
     @Override
     public String saveClient(Client client) throws IOException {
-        return clientDAO.saveClient(client);
+        return this.clientDAO.saveClient(client);
     }
 }
