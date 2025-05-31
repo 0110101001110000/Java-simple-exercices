@@ -5,7 +5,7 @@ package br.unit.seatwise_project.utility;
 // Init -------------------------------------------------------------------- //
 
 
-public class Logger {
+public class LoggerUtils {
 
 
     // Main methods
