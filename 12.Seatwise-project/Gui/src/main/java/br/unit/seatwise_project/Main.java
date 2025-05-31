@@ -4,6 +4,7 @@ package br.unit.seatwise_project;
 import br.unit.seatwise_project.model.Chair;
 import br.unit.seatwise_project.service.ChairService;
 import br.unit.seatwise_project.utility.LoggerUtils;
+import br.unit.seatwise_project.view.MainJFrame;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -21,7 +22,7 @@ public class Main {
 
         // TEMPORARY ------------------------------------------------------- //
 
-        try {
+        /*try {
             List<Chair> result = ChairService.getAllChairs().get();
             System.out.println("Resposta da API: ");
             for(Chair chair : result) {
@@ -29,7 +30,9 @@ public class Main {
             }
         } catch (Exception e) {
             LoggerUtils.getLogger(Main.class).log(Level.SEVERE,"Erro na requisição ao obter cadeiras", e);
-        }
+        }*/
+
+        new MainJFrame().setVisible(true);
 
         // TEMPORARY ------------------------------------------------------- //
 
