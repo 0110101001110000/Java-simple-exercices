@@ -4,6 +4,7 @@ package br.unit.seatwise_project.view;
 import br.unit.seatwise_project.config.ViewConfig;
 import br.unit.seatwise_project.controller.MainController;
 import br.unit.seatwise_project.model.Chair;
+import br.unit.seatwise_project.model.Client;
 import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.utility.LoggerUtils;
 
@@ -25,11 +26,14 @@ public class MainJFrame extends JFrame {
     // Attributes
 
     private final Logger logger = LoggerUtils.getLogger(MainJFrame.class);
+    private final Client client;
 
 
     // Constructors
 
-    public MainJFrame() throws HeadlessException {
+    public MainJFrame(Client client) throws HeadlessException {
+        this.client = client;
+
         logger.info("Inicializando frame principal");
 
         this.setSize(ViewConfig.SIZE);
@@ -107,8 +111,9 @@ public class MainJFrame extends JFrame {
 
                 button.setBackground(Color.WHITE);
                 button.setPreferredSize(new Dimension(32, 32));
-                button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-free-32x32.png"));
                 button.addActionListener(new MainController.ClickActionHandler(button));
+                button.setOnPressBackground(new Color(240, 244, 249));
+                button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-free-32x32.png"));
 
                 this.checkReserve(getAllReservesResponse, button);
 
@@ -152,9 +157,14 @@ public class MainJFrame extends JFrame {
         if (getAllReservesResponse != null) {
             for (Reserve reserve : getAllReservesResponse) {
                 if (reserve.getChairId().equals(button.getChair().getId())) {
-                    // String iconPath = (Math.random() <=.40) ? "src/main/resources/images/transparent-icon-woman-32x32.png": "src/main/resources/images/transparent-icon-man-32x32.png";
+
                     button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-block-32x32.png"));
                     button.setReserve(reserve);
+
+                    if (reserve.getClientId().equals(this.client.getId())) {
+                        button.setBorderColor(new Color(147, 198, 161));
+                    }
+
                     break;
                 }
             }
@@ -172,21 +182,20 @@ public class MainJFrame extends JFrame {
         private Chair   chair;
         private Reserve reserve;
 
-        private int  radius;
+        private int   radius;
+        private Color borderColor;
+        private Color onPressBackground;
 
 
         // Constructors
 
         public ReserveButton(Chair chair, Reserve reserve) {
-            this(chair, reserve, 20);
-        }
-
-        public ReserveButton(Chair chair, Reserve reserve, int radius) {
             super();
 
-            this.chair   = chair;
-            this.reserve = reserve;
-            this.radius  = radius;
+            this.chair             = chair;
+            this.reserve           = reserve;
+            this.radius            = 15;
+            this.onPressBackground = Color.LIGHT_GRAY;
 
             setContentAreaFilled(false);
         }
@@ -206,6 +215,14 @@ public class MainJFrame extends JFrame {
             return radius;
         }
 
+        public Color getBorderColor() {
+            return borderColor;
+        }
+
+        public Color getOnPressBackground() {
+            return onPressBackground;
+        }
+
 
         // Setter methods
 
@@ -221,21 +238,30 @@ public class MainJFrame extends JFrame {
             this.radius = radius;
         }
 
+        public void setBorderColor(Color borderColor) {
+            this.borderColor = borderColor;
+        }
+
+        public void setOnPressBackground(Color onPressBackground) {
+            this.onPressBackground = onPressBackground;
+        }
+
 
         // Main methods
 
         protected void paintComponent(Graphics g) {
             if (getModel().isArmed()) {
-                g.setColor(Color.LIGHT_GRAY);
+                g.setColor(this.getOnPressBackground());
             } else {
                 g.setColor(getBackground());
             }
-            g.fillRoundRect(0, 0, getWidth(), getHeight(), this.radius, this.radius);
+            g.fillRoundRect(0, 0, getWidth(), getHeight(), this.getRadius(), this.getRadius());
             super.paintComponent(g);
         }
+
         protected void paintBorder(Graphics g) {
-            g.setColor(getBackground());
-            g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, this.radius, this.radius);
+            g.setColor(this.getBorderColor());
+            g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, this.getRadius(), this.getRadius());
         }
     }
 }

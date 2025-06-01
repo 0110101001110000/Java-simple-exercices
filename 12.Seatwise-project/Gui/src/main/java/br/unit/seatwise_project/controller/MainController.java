@@ -115,7 +115,7 @@ public class MainController {
 
             // Resize logo
             int newImageSize = Math.min(logoSectionPanel.getWidth(), logoSectionPanel.getHeight());
-            if (newImageSize < 256) {
+            if (newImageSize < 320) {
                 Image newImage = logoImage.getScaledInstance(
                         newImageSize,
                         newImageSize,
