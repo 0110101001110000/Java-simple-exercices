@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,8 +40,6 @@ public class ReserveController {
 
     @GetMapping
     public ResponseEntity<List<Reserve>> getAllReserves() {
-        final List<Reserve> nullReserve = new ArrayList<>(1);
-        nullReserve.add(new Reserve(null, null, null));
         try {
             List<Reserve> response = reserveService.getAllReserves();
 
@@ -52,10 +49,10 @@ public class ReserveController {
             }
 
             logger.info("Reservas não encontradas");
-            return new ResponseEntity<>(nullReserve, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.log(Level.SEVERE,"Erro interno ao obter reservas", e);
-            return new ResponseEntity<>(nullReserve, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

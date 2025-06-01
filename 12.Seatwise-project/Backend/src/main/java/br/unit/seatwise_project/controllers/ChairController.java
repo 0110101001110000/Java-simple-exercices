@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,8 +37,6 @@ public class ChairController {
 
     @GetMapping
     public ResponseEntity<List<Chair>> getAllChairs() {
-        final List<Chair> nullChairs = new ArrayList<>(1);
-        nullChairs.add(new Chair(null));
         try {
             List<Chair> response = chairService.getAllChairs();
 
@@ -49,10 +46,10 @@ public class ChairController {
             }
 
             logger.info("Cadeiras não encontradas");
-            return new ResponseEntity<>(nullChairs, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.log(Level.SEVERE,"Erro interno ao obter cadeiras", e);
-            return new ResponseEntity<>(nullChairs, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

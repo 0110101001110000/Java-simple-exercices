@@ -23,7 +23,6 @@ public class ClientController {
     // Attributes
 
     private final Logger logger     = Logger.getLogger(ClientController.class.getName());
-    private final Client nullClient = new Client(null, null, null);
 
     private final ClientService clientService;
 
@@ -46,10 +45,10 @@ public class ClientController {
             }
 
             logger.info("Cliente não encontrado");
-            return new ResponseEntity<>(this.nullClient, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.log(Level.SEVERE,"Erro interno ao obter cliente", e);
-            return new ResponseEntity<>(this.nullClient, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
