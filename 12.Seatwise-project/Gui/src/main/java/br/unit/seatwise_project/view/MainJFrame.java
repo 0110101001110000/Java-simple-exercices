@@ -3,10 +3,13 @@ package br.unit.seatwise_project.view;
 
 import br.unit.seatwise_project.config.ViewConfig;
 import br.unit.seatwise_project.controller.MainController;
+import br.unit.seatwise_project.model.Chair;
 import br.unit.seatwise_project.utility.LoggerUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -76,14 +79,14 @@ public class MainJFrame extends JFrame {
         JPanel contentSectionPanel = new JPanel();
 
         contentSectionPanel.setBackground(Color.WHITE);
-        contentSectionPanel.setLayout(new FlowLayout());
+        contentSectionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 
         // Label
 
         JLabel logo = new JLabel();
 
-        ImageIcon logoImage = new ImageIcon("src/main/resources/images/transparent-icon.png");
+        ImageIcon logoImage = new ImageIcon(ViewConfig.LOGO);
         logo.setIcon(logoImage);
         logo.setHorizontalAlignment(JLabel.CENTER);
         logo.setVerticalAlignment(JLabel.CENTER);
@@ -91,7 +94,22 @@ public class MainJFrame extends JFrame {
 
         // Chairs
 
-        // ...
+        List<ChairButton> buttons = new ArrayList<>();
+        List<Chair> getAllChairsResponse = MainController.getAllChairs();
+        if (getAllChairsResponse != null) {
+            for (Chair chair : getAllChairsResponse) {
+                ChairButton button = new ChairButton(chair.getId());
+
+                button.setBackground(Color.WHITE);
+                button.setPreferredSize(new Dimension(32, 32));
+                button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-32x32.png"));
+                button.addActionListener(new MainController.ClickActionHandler(button));
+
+                buttons.add(button);
+            }
+        } else {
+            logger.warning("Cadeiras não encontradas");
+        }
 
 
         // Resize components
@@ -103,12 +121,15 @@ public class MainJFrame extends JFrame {
 
         logger.info("Adicionando componentes no frame principal");
 
+        for (ChairButton button : buttons) {contentSectionPanel.add(button);}
+
         logoSectionPanel.add(logo, BorderLayout.CENTER);
 
         mainPanel.add(logoSectionPanel);
         mainPanel.add(contentSectionPanel);
 
         this.add(mainPanel, BorderLayout.CENTER);
+
         this.add(topSpace, BorderLayout.NORTH);
         this.add(bottomSpace, BorderLayout.SOUTH);
         this.add(leftSpace, BorderLayout.WEST);
@@ -116,7 +137,54 @@ public class MainJFrame extends JFrame {
     }
 
 
-    // Main methods
+    // Other classes
 
-    // ...
+    public static class ChairButton extends JButton {
+
+
+        // Attributes
+
+        private Long id;
+        private int  radius;
+
+
+        // Constructors
+
+        public ChairButton(Long id) {
+            super();
+
+            this.id     = id;
+            this.radius = 20;
+
+            setContentAreaFilled(false);
+        }
+
+
+        // Getters and Setters
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+
+        // Main methods
+
+        protected void paintComponent(Graphics g) {
+            if (getModel().isArmed()) {
+                g.setColor(Color.LIGHT_GRAY);
+            } else {
+                g.setColor(getBackground());
+            }
+            g.fillRoundRect(0, 0, getWidth(), getHeight(), this.radius, this.radius);
+            super.paintComponent(g);
+        }
+        protected void paintBorder(Graphics g) {
+            g.setColor(getBackground());
+            g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, this.radius, this.radius);
+        }
+    }
 }

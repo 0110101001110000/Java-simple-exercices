@@ -10,7 +10,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
@@ -41,9 +40,7 @@ public class ChairService {
                 .thenApply(JsonUtils::parseChair)
                 .exceptionally(exception -> {
                     logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", exception);
-                    final List<Chair> nullChairs = new ArrayList<>(1);
-                    nullChairs.add(new Chair(null));
-                    return nullChairs;
+                    return null;
         });
     }
 }
