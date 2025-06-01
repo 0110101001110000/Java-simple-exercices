@@ -2,7 +2,7 @@
 package br.unit.seatwise_project.service;
 
 import br.unit.seatwise_project.config.ApiConfig;
-import br.unit.seatwise_project.model.Chair;
+import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.utility.JsonUtils;
 import br.unit.seatwise_project.utility.LoggerUtils;
 
@@ -19,28 +19,29 @@ import java.util.logging.Logger;
 // Init -------------------------------------------------------------------- //
 
 
-public class ChairService {
+public class ReserveService {
 
 
     // Attributes
 
-    private static Logger logger = LoggerUtils.getLogger(ChairService.class);
+    private final static Logger logger = LoggerUtils.getLogger(ReserveService.class);
 
 
     // Main methods
 
-    public static CompletableFuture<List<Chair>> getAllChairs() {
-        logger.info("Iniciando requisição Api para: " + ApiConfig.CHAIR_ENDPOINT);
+    public static CompletableFuture<List<Reserve>> getAllReserves() {
+        logger.info("Iniciando requisição Api para: " + ApiConfig.RESERVE_ENDPOINT);
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(ApiConfig.CHAIR_ENDPOINT)).GET().build();
+        HttpClient  client   = HttpClient.newHttpClient();
+        HttpRequest request  = HttpRequest.newBuilder().GET().uri(URI.create(ApiConfig.RESERVE_ENDPOINT)).build();
+
         CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
         return response
                 .thenApply(HttpResponse::body)
-                .thenApply(JsonUtils::parseChairs)
+                .thenApply(JsonUtils::parseReserves)
                 .exceptionally(exception -> {
-                    logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", exception);
-                    return null;
+            logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", exception);
+            return null;
         });
     }
 }

@@ -2,6 +2,7 @@
 package br.unit.seatwise_project.utility;
 
 import br.unit.seatwise_project.model.Chair;
+import br.unit.seatwise_project.model.Reserve;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -23,8 +24,13 @@ public class JsonUtils {
 
     // Main methods
 
-    public static List<Chair> parseChair(String json) {
+    public static List<Chair> parseChairs(String json) {
         Type listType = new TypeToken<List<Chair>>(){}.getType();
+        return gson.fromJson(json, listType);
+    }
+
+    public static List<Reserve> parseReserves(String json) {
+        Type listType = new TypeToken<List<Reserve>>(){}.getType();
         return gson.fromJson(json, listType);
     }
 }

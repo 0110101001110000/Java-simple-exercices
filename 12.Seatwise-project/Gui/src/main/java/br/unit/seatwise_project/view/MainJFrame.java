@@ -4,13 +4,16 @@ package br.unit.seatwise_project.view;
 import br.unit.seatwise_project.config.ViewConfig;
 import br.unit.seatwise_project.controller.MainController;
 import br.unit.seatwise_project.model.Chair;
+import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.utility.LoggerUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Logger;
+import java.util.random.RandomGenerator;
 
 
 // Init -------------------------------------------------------------------- //
@@ -48,8 +51,8 @@ public class MainJFrame extends JFrame {
 
         topSpace.setPreferredSize(new Dimension(100, 64));
         bottomSpace.setPreferredSize(new Dimension(100, 64));
-        leftSpace.setPreferredSize(new Dimension(256, 100));
-        rightSpace.setPreferredSize(new Dimension(256, 100));
+        leftSpace.setPreferredSize(new Dimension(186, 100));
+        rightSpace.setPreferredSize(new Dimension(186, 100));
 
         topSpace.setBackground(ViewConfig.BACKGROUND);
         bottomSpace.setBackground(ViewConfig.BACKGROUND);
@@ -82,7 +85,7 @@ public class MainJFrame extends JFrame {
         contentSectionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
 
-        // Label
+        // Logo
 
         JLabel logo = new JLabel();
 
@@ -92,18 +95,24 @@ public class MainJFrame extends JFrame {
         logo.setVerticalAlignment(JLabel.CENTER);
 
 
-        // Chairs
+        // Fetch chairs and reserves
 
-        List<ChairButton> buttons = new ArrayList<>();
-        List<Chair> getAllChairsResponse = MainController.getAllChairs();
+        List<ReserveButton> buttons                = new ArrayList<>();
+        List<Chair>         getAllChairsResponse   = MainController.getAllChairs();
+        List<Reserve>       getAllReservesResponse = MainController.getAllReserves();
+
         if (getAllChairsResponse != null) {
             for (Chair chair : getAllChairsResponse) {
-                ChairButton button = new ChairButton(chair.getId());
+                ReserveButton button = new ReserveButton(chair, null);
 
                 button.setBackground(Color.WHITE);
                 button.setPreferredSize(new Dimension(32, 32));
-                button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-32x32.png"));
+                button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-free-32x32.png"));
                 button.addActionListener(new MainController.ClickActionHandler(button));
+
+                this.checkReserve(getAllReservesResponse, button);
+
+                button.setToolTipText(String.format("Id: %d | Status: %s", button.chair.getId(), (button.reserve == null)? "Livre" : "Ocupada"));
 
                 buttons.add(button);
             }
@@ -121,7 +130,7 @@ public class MainJFrame extends JFrame {
 
         logger.info("Adicionando componentes no frame principal");
 
-        for (ChairButton button : buttons) {contentSectionPanel.add(button);}
+        for (ReserveButton button : buttons) {contentSectionPanel.add(button);}
 
         logoSectionPanel.add(logo, BorderLayout.CENTER);
 
@@ -137,37 +146,79 @@ public class MainJFrame extends JFrame {
     }
 
 
+    // Main methods
+
+    private void checkReserve(List<Reserve> getAllReservesResponse, ReserveButton button) {
+        if (getAllReservesResponse != null) {
+            for (Reserve reserve : getAllReservesResponse) {
+                if (reserve.getChairId().equals(button.getChair().getId())) {
+                    // String iconPath = (Math.random() <=.40) ? "src/main/resources/images/transparent-icon-woman-32x32.png": "src/main/resources/images/transparent-icon-man-32x32.png";
+                    button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-block-32x32.png"));
+                    button.setReserve(reserve);
+                    break;
+                }
+            }
+        }
+    }
+
+
     // Other classes
 
-    public static class ChairButton extends JButton {
+    public static class ReserveButton extends JButton {
 
 
         // Attributes
 
-        private Long id;
+        private Chair   chair;
+        private Reserve reserve;
+
         private int  radius;
 
 
         // Constructors
 
-        public ChairButton(Long id) {
+        public ReserveButton(Chair chair, Reserve reserve) {
+            this(chair, reserve, 20);
+        }
+
+        public ReserveButton(Chair chair, Reserve reserve, int radius) {
             super();
 
-            this.id     = id;
-            this.radius = 20;
+            this.chair   = chair;
+            this.reserve = reserve;
+            this.radius  = radius;
 
             setContentAreaFilled(false);
         }
 
 
-        // Getters and Setters
+        // Getter methods
 
-        public Long getId() {
-            return id;
+        public Chair getChair() {
+            return chair;
         }
 
-        public void setId(Long id) {
-            this.id = id;
+        public Reserve getReserve() {
+            return reserve;
+        }
+
+        public int getRadius() {
+            return radius;
+        }
+
+
+        // Setter methods
+
+        public void setChair(Chair chair) {
+            this.chair = chair;
+        }
+
+        public void setReserve(Reserve reserve) {
+            this.reserve = reserve;
+        }
+
+        public void setRadius(int radius) {
+            this.radius = radius;
         }
 
 

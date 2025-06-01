@@ -2,7 +2,9 @@
 package br.unit.seatwise_project.controller;
 
 import br.unit.seatwise_project.model.Chair;
+import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.service.ChairService;
+import br.unit.seatwise_project.service.ReserveService;
 import br.unit.seatwise_project.utility.LoggerUtils;
 import br.unit.seatwise_project.view.MainJFrame;
 
@@ -12,7 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.List;
@@ -36,9 +37,19 @@ public class MainController {
             return ChairService.getAllChairs().get();
         } catch (Exception e) {
             logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", e);
-            return new ArrayList<>();
+            return null;
         }
     }
+
+    public static List<Reserve> getAllReserves() {
+        try {
+            return ReserveService.getAllReserves().get();
+        } catch (Exception e) {
+            logger.log(Level.SEVERE,"Erro na requisição ao obter reservas", e);
+            return null;
+        }
+    }
+
 
     // Private classes
 
@@ -49,13 +60,13 @@ public class MainController {
 
         private final Logger logger = LoggerUtils.getLogger(ClickActionHandler.class);
 
-        private final MainJFrame.ChairButton chairButton;
+        private final MainJFrame.ReserveButton reserveButton;
 
 
         // Constructors
 
-        public ClickActionHandler(MainJFrame.ChairButton chairButton) {
-            this.chairButton = chairButton;
+        public ClickActionHandler(MainJFrame.ReserveButton reserveButton) {
+            this.reserveButton = reserveButton;
         }
 
 
@@ -63,8 +74,8 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource().equals(this.chairButton)) {
-                logger.info("Botão de id " + this.chairButton.getId() + " foi clicado!");
+            if (e.getSource().equals(this.reserveButton)) {
+                logger.info("Cadeira de id " + this.reserveButton.getChair().getId() + " foi clicada!");
             }
         }
     }
