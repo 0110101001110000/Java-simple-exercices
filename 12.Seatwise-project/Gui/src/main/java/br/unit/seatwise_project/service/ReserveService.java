@@ -30,23 +30,28 @@ public class ReserveService {
     // Main methods
 
     public static CompletableFuture<List<Reserve>> getAllReserves() {
-        logger.info("Iniciando requisição Api para: " + ApiConfig.RESERVE_ENDPOINT);
+        logger.info("Iniciando requisição Api GET para: " + ApiConfig.RESERVE_ENDPOINT);
 
         HttpClient  client   = HttpClient.newHttpClient();
         HttpRequest request  = HttpRequest.newBuilder().GET().uri(URI.create(ApiConfig.RESERVE_ENDPOINT)).build();
 
         CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+        int statusCode = response.thenApply(HttpResponse::statusCode).join();
+        logger.info("Status Code da requisição: " + statusCode);
+
         return response
                 .thenApply(HttpResponse::body)
                 .thenApply(JsonUtils::parseReserves)
                 .exceptionally(exception -> {
-            logger.log(Level.SEVERE,"Erro na requisição ao obter reservas", exception);
-            return null;
-        });
+                    logger.log(Level.SEVERE,"Erro na requisição ao obter reservas", exception);
+                    return null;
+                }
+        );
     }
 
     public static CompletableFuture<String> addReserve(Reserve reserve) {
-        logger.info("Iniciando requisição Api para: " + ApiConfig.RESERVE_ENDPOINT);
+        logger.info("Iniciando requisição Api POST para: " + ApiConfig.RESERVE_ENDPOINT);
 
         HttpClient  client   = HttpClient.newHttpClient();
         HttpRequest request  = HttpRequest.newBuilder()
@@ -56,11 +61,39 @@ public class ReserveService {
                 .build();
 
         CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+        int statusCode = response.thenApply(HttpResponse::statusCode).join();
+        logger.info("Status Code da requisição: " + statusCode);
+
         return response
                 .thenApply(HttpResponse::body)
                 .exceptionally(exception -> {
                     logger.log(Level.SEVERE,"Erro na requisição ao obter criar reserva", exception);
                     return null;
-                });
+                }
+        );
+    }
+
+    public static CompletableFuture<String> deleteReserve(Long id) {
+        logger.info(String.format("Iniciando requisição Api DELETE para: %s/%d", ApiConfig.RESERVE_ENDPOINT, id));
+
+        HttpClient  client  = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .DELETE()
+                .uri(URI.create(String.format("%s/%d", ApiConfig.RESERVE_ENDPOINT, id)))
+                .build();
+
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+        int statusCode = response.thenApply(HttpResponse::statusCode).join();
+        logger.info("Status Code da requisição: " + statusCode);
+
+        return response
+                .thenApply(HttpResponse::body)
+                .exceptionally(exception -> {
+                    logger.log(Level.SEVERE, "Erro na requisição ao remover reserva", exception);
+                    return null;
+                }
+        );
     }
 }

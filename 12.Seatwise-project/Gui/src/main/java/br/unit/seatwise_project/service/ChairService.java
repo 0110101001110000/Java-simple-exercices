@@ -30,17 +30,25 @@ public class ChairService {
     // Main methods
 
     public static CompletableFuture<List<Chair>> getAllChairs() {
-        logger.info("Iniciando requisição Api para: " + ApiConfig.CHAIR_ENDPOINT);
+        logger.info("Iniciando requisição Api GET para: " + ApiConfig.CHAIR_ENDPOINT);
 
-        HttpClient client = HttpClient.newHttpClient();
+        HttpClient  client  = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create(ApiConfig.CHAIR_ENDPOINT)).GET().build();
-        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(
+                request, HttpResponse.BodyHandlers.ofString()
+        );
+
+        int statusCode = response.thenApply(HttpResponse::statusCode).join();
+        logger.info("Status Code da requisição: " + statusCode);
+
         return response
                 .thenApply(HttpResponse::body)
                 .thenApply(JsonUtils::parseChairs)
                 .exceptionally(exception -> {
                     logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", exception);
                     return null;
-        });
+                }
+        );
     }
 }

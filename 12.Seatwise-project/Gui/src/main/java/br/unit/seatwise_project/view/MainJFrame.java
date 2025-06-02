@@ -101,9 +101,10 @@ public class MainJFrame extends JFrame {
 
         List<ReserveButton> buttons                = new ArrayList<>();
         List<Chair>         getAllChairsResponse   = MainController.getAllChairs();
-        List<Reserve>       getAllReservesResponse = MainController.getAllReserves();
 
         if (getAllChairsResponse != null) {
+            List<Reserve> getAllReservesResponse = MainController.getAllReserves();
+
             for (Chair chair : getAllChairsResponse) {
                 ReserveButton button = new ReserveButton(chair, null);
 
