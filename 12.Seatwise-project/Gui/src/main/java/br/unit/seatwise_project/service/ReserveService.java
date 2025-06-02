@@ -40,8 +40,27 @@ public class ReserveService {
                 .thenApply(HttpResponse::body)
                 .thenApply(JsonUtils::parseReserves)
                 .exceptionally(exception -> {
-            logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", exception);
+            logger.log(Level.SEVERE,"Erro na requisição ao obter reservas", exception);
             return null;
         });
+    }
+
+    public static CompletableFuture<String> addReserve(Reserve reserve) {
+        logger.info("Iniciando requisição Api para: " + ApiConfig.RESERVE_ENDPOINT);
+
+        HttpClient  client   = HttpClient.newHttpClient();
+        HttpRequest request  = HttpRequest.newBuilder()
+                .uri(URI.create(ApiConfig.RESERVE_ENDPOINT))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(JsonUtils.parseString(reserve)))
+                .build();
+
+        CompletableFuture<HttpResponse<String>> response = client.sendAsync(request, HttpResponse.BodyHandlers.ofString());
+        return response
+                .thenApply(HttpResponse::body)
+                .exceptionally(exception -> {
+                    logger.log(Level.SEVERE,"Erro na requisição ao obter criar reserva", exception);
+                    return null;
+                });
     }
 }

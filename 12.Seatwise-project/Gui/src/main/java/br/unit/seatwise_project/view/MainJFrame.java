@@ -12,9 +12,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Logger;
-import java.util.random.RandomGenerator;
 
 
 // Init -------------------------------------------------------------------- //
@@ -111,7 +109,7 @@ public class MainJFrame extends JFrame {
 
                 button.setBackground(Color.WHITE);
                 button.setPreferredSize(new Dimension(32, 32));
-                button.addActionListener(new MainController.ClickActionHandler(button));
+                button.addActionListener(new MainController.ClickActionHandler(button, client));
                 button.setOnPressBackground(new Color(240, 244, 249));
                 button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-free-32x32.png"));
 

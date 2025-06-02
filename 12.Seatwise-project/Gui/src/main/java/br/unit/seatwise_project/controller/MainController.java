@@ -2,6 +2,7 @@
 package br.unit.seatwise_project.controller;
 
 import br.unit.seatwise_project.model.Chair;
+import br.unit.seatwise_project.model.Client;
 import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.service.ChairService;
 import br.unit.seatwise_project.service.ReserveService;
@@ -61,12 +62,14 @@ public class MainController {
         private final Logger logger = LoggerUtils.getLogger(ClickActionHandler.class);
 
         private final MainJFrame.ReserveButton reserveButton;
+        private final Client                   client;
 
 
         // Constructors
 
-        public ClickActionHandler(MainJFrame.ReserveButton reserveButton) {
+        public ClickActionHandler(MainJFrame.ReserveButton reserveButton, Client client) {
             this.reserveButton = reserveButton;
+            this.client        = client;
         }
 
 
@@ -76,6 +79,37 @@ public class MainController {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource().equals(this.reserveButton)) {
                 logger.info("Cadeira de id " + this.reserveButton.getChair().getId() + " foi clicada!");
+
+                if (this.reserveButton.getReserve() == null) {
+                    int confirmation = JOptionPane.showConfirmDialog(
+                            null,
+                            String.format("Realmente deseja reservar a cadeira de id %d?", this.reserveButton.getChair().getId()),
+                            "Reservar Cadeira",
+                            JOptionPane.OK_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE
+                    );
+                    if (confirmation == JOptionPane.YES_OPTION) {
+                        this.addReserve();
+                    }
+                }
+
+                else {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            (this.client.getId().equals(this.reserveButton.getReserve().getClientId()) ? "Você já reservou essa cadeira" : "Essa cadeira já foi reservada"),
+                            "Reservar Cadeira",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+            }
+        }
+
+        private void addReserve() {
+            try {
+                String response = ReserveService.addReserve(new Reserve(null, this.client.getId(), this.reserveButton.getChair().getId())).get();
+                logger.info(response);
+            } catch (Exception exception) {
+                logger.log(Level.SEVERE,"Erro na requisição ao obter criar reserva", exception);
             }
         }
     }
@@ -88,7 +122,7 @@ public class MainController {
         JPanel logoSectionPanel;
         JPanel contentSectionPanel;
         JLabel logo;
-        Image logoImage;
+        Image  logoImage;
 
 
         // Constructors
