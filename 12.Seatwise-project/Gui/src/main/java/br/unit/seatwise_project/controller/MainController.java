@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.net.ConnectException;
 import java.util.concurrent.CompletionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,8 +44,8 @@ public class MainController {
             JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        catch (Exception e) {
-            logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", e);
+        catch (Exception exception) {
+            logger.log(Level.SEVERE,"Erro na requisição ao obter cadeiras", exception);
             return null;
         }
     }
@@ -61,9 +60,39 @@ public class MainController {
             JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
             return null;
         }
-        catch (Exception e) {
-            logger.log(Level.SEVERE,"Erro na requisição ao obter reservas", e);
+        catch (Exception exception) {
+            logger.log(Level.SEVERE,"Erro na requisição ao obter reservas", exception);
             return null;
+        }
+    }
+
+    public static void addReserve(Reserve reserve) {
+        try {
+            String response = ReserveService.addReserve(reserve).get();
+            logger.info(response);
+        }
+        catch (CompletionException completionException) {
+            String message = "Erro de conexão ao comunicar-se com a Api";
+            logger.log(Level.SEVERE,message, completionException);
+            JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception exception) {
+            logger.log(Level.SEVERE,"Erro na requisição ao criar reserva", exception);
+        }
+    }
+
+    public static void deleteReserve(Long id) {
+        try {
+            String response = ReserveService.deleteReserve(id).get();
+            logger.info(response);
+        }
+        catch (CompletionException completionException) {
+            String message = "Erro de conexão ao comunicar-se com a Api";
+            logger.log(Level.SEVERE,message, completionException);
+            JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception exception) {
+            logger.log(Level.SEVERE,"Erro na requisição ao remover reserva", exception);
         }
     }
 
@@ -103,7 +132,7 @@ public class MainController {
                             JOptionPane.QUESTION_MESSAGE
                     );
                     if (confirmation == JOptionPane.YES_OPTION) {
-                        this.addReserve();
+                        addReserve(new Reserve(null, client.getId(), this.reserveButton.getChair().getId()));
                     }
                 }
                 else if (this.client.getId().equals(this.reserveButton.getReserve().getClientId())) {
@@ -115,7 +144,7 @@ public class MainController {
                             JOptionPane.WARNING_MESSAGE
                     );
                     if (confirmation == JOptionPane.YES_OPTION) {
-                        this.deleteReserve();
+                        deleteReserve(this.reserveButton.getReserve().getId());
                     }
                 }
                 else {
@@ -126,36 +155,6 @@ public class MainController {
                             JOptionPane.INFORMATION_MESSAGE
                     );
                 }
-            }
-        }
-
-        private void addReserve() {
-            try {
-                String response = ReserveService.addReserve(new Reserve(null, this.client.getId(), this.reserveButton.getChair().getId())).get();
-                logger.info(response);
-            }
-            catch (CompletionException completionException) {
-                String message = "Erro de conexão ao comunicar-se com a Api";
-                logger.log(Level.SEVERE,message, completionException);
-                JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-            catch (Exception exception) {
-                logger.log(Level.SEVERE,"Erro na requisição ao criar reserva", exception);
-            }
-        }
-
-        private void deleteReserve() {
-            try {
-                String response = ReserveService.deleteReserve(this.reserveButton.getReserve().getId()).get();
-                logger.info(response);
-            }
-            catch (CompletionException completionException) {
-                String message = "Erro de conexão ao comunicar-se com a Api";
-                logger.log(Level.SEVERE,message, completionException);
-                JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
-            }
-            catch (Exception exception) {
-                logger.log(Level.SEVERE,"Erro na requisição ao remover reserva", exception);
             }
         }
     }

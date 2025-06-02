@@ -46,20 +46,23 @@ public class MainJFrame extends JFrame {
 
         // Spaces
 
-        JPanel topSpace    = new JPanel();
-        JPanel bottomSpace = new JPanel();
-        JPanel leftSpace   = new JPanel();
-        JPanel rightSpace  = new JPanel();
+        JPanel topSpacePanel    = new JPanel();
+        JPanel bottomSpacePanel = new JPanel();
+        JPanel leftSpacePanel   = new JPanel();
+        JPanel rightSpacePanel  = new JPanel();
 
-        topSpace.setPreferredSize(new Dimension(100, 64));
-        bottomSpace.setPreferredSize(new Dimension(100, 64));
-        leftSpace.setPreferredSize(new Dimension(186, 100));
-        rightSpace.setPreferredSize(new Dimension(186, 100));
+        int verticalSpace   = 64;
+        int horizontalSpace = 186;
 
-        topSpace.setBackground(ViewConfig.BACKGROUND);
-        bottomSpace.setBackground(ViewConfig.BACKGROUND);
-        leftSpace.setBackground(ViewConfig.BACKGROUND);
-        rightSpace.setBackground(ViewConfig.BACKGROUND);
+        topSpacePanel.setPreferredSize(new Dimension(100, verticalSpace));
+        bottomSpacePanel.setPreferredSize(new Dimension(100, verticalSpace));
+        leftSpacePanel.setPreferredSize(new Dimension(horizontalSpace, 100));
+        rightSpacePanel.setPreferredSize(new Dimension(horizontalSpace, 100));
+
+        topSpacePanel.setBackground(ViewConfig.BACKGROUND);
+        bottomSpacePanel.setBackground(ViewConfig.BACKGROUND);
+        leftSpacePanel.setBackground(ViewConfig.BACKGROUND);
+        rightSpacePanel.setBackground(ViewConfig.BACKGROUND);
 
 
         // Main panel
@@ -75,14 +78,22 @@ public class MainJFrame extends JFrame {
 
         JPanel logoSectionPanel = new JPanel();
 
+        int logoSectionPanelWidth  = (ViewConfig.SIZE.width - horizontalSpace * 2);
+        int logoSectionPanelHeight = (ViewConfig.SIZE.height - verticalSpace * 2) / 3;
+
+        logoSectionPanel.setPreferredSize(new Dimension(logoSectionPanelWidth, logoSectionPanelHeight));
         logoSectionPanel.setBackground(Color.WHITE);
         logoSectionPanel.setLayout(new BorderLayout());
 
 
-        // Logo section panel
+        // Content section panel
 
         JPanel contentSectionPanel = new JPanel();
 
+        int contentSectionPanelWidth  = ViewConfig.SIZE.width - (horizontalSpace * 2);
+        int contentSectionPanelHeight = ViewConfig.SIZE.height - (verticalSpace * 2) / 3 * 2;
+
+        contentSectionPanel.setPreferredSize(new Dimension(contentSectionPanelWidth, contentSectionPanelHeight));
         contentSectionPanel.setBackground(Color.WHITE);
         contentSectionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -91,10 +102,16 @@ public class MainJFrame extends JFrame {
 
         JLabel logo = new JLabel();
 
-        ImageIcon logoImage = new ImageIcon(ViewConfig.LOGO);
-        logo.setIcon(logoImage);
+        ImageIcon logoIcon = new ImageIcon(ViewConfig.LOGO);
         logo.setHorizontalAlignment(JLabel.CENTER);
         logo.setVerticalAlignment(JLabel.CENTER);
+        int newImageSize = contentSectionPanelHeight / 3 - 12;
+        Image resizedLogo = logoIcon.getImage().getScaledInstance(
+                newImageSize,
+                newImageSize,
+                Image.SCALE_DEFAULT
+        );
+        logo.setIcon(new ImageIcon(resizedLogo));
 
 
         // Fetch chairs and reserves
@@ -127,7 +144,7 @@ public class MainJFrame extends JFrame {
 
         // Resize components
 
-        mainPanel.addComponentListener(new MainController.SizeTracker(logoSectionPanel, contentSectionPanel, logo, logoImage.getImage()));
+        mainPanel.addComponentListener(new MainController.SizeTracker(logoSectionPanel, contentSectionPanel, logo, logoIcon.getImage()));
 
 
         // Add components
@@ -143,10 +160,10 @@ public class MainJFrame extends JFrame {
 
         this.add(mainPanel, BorderLayout.CENTER);
 
-        this.add(topSpace, BorderLayout.NORTH);
-        this.add(bottomSpace, BorderLayout.SOUTH);
-        this.add(leftSpace, BorderLayout.WEST);
-        this.add(rightSpace, BorderLayout.EAST);
+        this.add(topSpacePanel, BorderLayout.NORTH);
+        this.add(bottomSpacePanel, BorderLayout.SOUTH);
+        this.add(leftSpacePanel, BorderLayout.WEST);
+        this.add(rightSpacePanel, BorderLayout.EAST);
     }
 
 

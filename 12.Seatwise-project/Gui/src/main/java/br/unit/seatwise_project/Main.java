@@ -12,6 +12,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        new MainJFrame(new Client(1L, "test@test.test", "test", "+00 (00) 00000-0000")).setVisible(true);
+        new MainJFrame(new Client(1L, "test@test.com", "password", "+00 (00) 00000-0000")).setVisible(true);
     }
 }
