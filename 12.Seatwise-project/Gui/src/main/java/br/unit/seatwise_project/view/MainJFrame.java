@@ -7,6 +7,7 @@ import br.unit.seatwise_project.model.Chair;
 import br.unit.seatwise_project.model.Client;
 import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.utility.LoggerUtils;
+import br.unit.seatwise_project.view.ui.ChairButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,6 +26,8 @@ public class MainJFrame extends JFrame {
 
     private final Logger logger = LoggerUtils.getLogger(MainJFrame.class);
     private final Client client;
+
+    private final List<ChairButton> chairButtons;
 
 
     // Constructors
@@ -114,32 +117,10 @@ public class MainJFrame extends JFrame {
         logo.setIcon(new ImageIcon(resizedLogo));
 
 
-        // Fetch chairs and reserves
+        // Fetch reserve buttons and reserves
 
-        List<ReserveButton> buttons                = new ArrayList<>();
-        List<Chair>         getAllChairsResponse   = MainController.getAllChairs();
-
-        if (getAllChairsResponse != null) {
-            List<Reserve> getAllReservesResponse = MainController.getAllReserves();
-
-            for (Chair chair : getAllChairsResponse) {
-                ReserveButton button = new ReserveButton(chair, null);
-
-                button.setBackground(Color.WHITE);
-                button.setPreferredSize(new Dimension(32, 32));
-                button.addActionListener(new MainController.ClickActionHandler(button, client));
-                button.setOnPressBackground(new Color(240, 244, 249));
-                button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-free-32x32.png"));
-
-                this.checkReserve(getAllReservesResponse, button);
-
-                button.setToolTipText(String.format("Id: %d | Status: %s", button.chair.getId(), (button.reserve == null)? "Livre" : "Ocupada"));
-
-                buttons.add(button);
-            }
-        } else {
-            logger.warning("Cadeiras não encontradas");
-        }
+        chairButtons = this.fetchReserveButtons();
+        this.fetchReserves(chairButtons);
 
 
         // Resize components
@@ -151,7 +132,7 @@ public class MainJFrame extends JFrame {
 
         logger.info("Adicionando componentes no frame principal");
 
-        for (ReserveButton button : buttons) {contentSectionPanel.add(button);}
+        for (ChairButton button : chairButtons) {contentSectionPanel.add(button);}
 
         logoSectionPanel.add(logo, BorderLayout.CENTER);
 
@@ -169,115 +150,39 @@ public class MainJFrame extends JFrame {
 
     // Main methods
 
-    private void checkReserve(List<Reserve> getAllReservesResponse, ReserveButton button) {
-        if (getAllReservesResponse != null) {
-            for (Reserve reserve : getAllReservesResponse) {
-                if (reserve.getChairId().equals(button.getChair().getId())) {
+    private List<ChairButton> fetchReserveButtons() {
+        List<ChairButton> chairButtons         = new ArrayList<>();
+        List<Chair>       getAllChairsResponse = MainController.getAllChairs();
 
-                    button.setIcon(new ImageIcon("src/main/resources/images/transparent-icon-block-32x32.png"));
-                    button.setReserve(reserve);
-
-                    if (reserve.getClientId().equals(this.client.getId())) {
-                        button.setBorderColor(new Color(147, 198, 161));
-                    }
-
-                    break;
-                }
+        if (getAllChairsResponse != null) {
+            for (Chair chair : getAllChairsResponse) {
+                ChairButton button = new ChairButton(this.client, chair);
+                chairButtons.add(button);
+                chairButtons.get(chairButtons.indexOf(button)).addActionListener(new MainController.ClickActionHandler(button));
             }
+        } else {
+            logger.warning("Cadeiras não encontradas");
         }
+
+        return chairButtons;
     }
 
+    private void fetchReserves(List<ChairButton> chairButtons) {
+        List<Reserve> getAllReservesResponse = MainController.getAllReserves();
 
-    // Other classes
+        if (getAllReservesResponse != null) {
+            for (ChairButton chairButton : chairButtons) {
+                for (Reserve reserve : getAllReservesResponse) {
+                    if (reserve.getChairId().equals(chairButton.getChair().getId())) {
 
-    public static class ReserveButton extends JButton {
+                        ChairButton newButton = new ChairButton(chairButton.getClient(), chairButton.getChair(), reserve);
+                        newButton.addActionListener(new MainController.ClickActionHandler(newButton));
+                        chairButtons.set(chairButtons.indexOf(chairButton), newButton);
 
-
-        // Attributes
-
-        private Chair   chair;
-        private Reserve reserve;
-
-        private int   radius;
-        private Color borderColor;
-        private Color onPressBackground;
-
-
-        // Constructors
-
-        public ReserveButton(Chair chair, Reserve reserve) {
-            super();
-
-            this.chair             = chair;
-            this.reserve           = reserve;
-            this.radius            = 15;
-            this.onPressBackground = Color.LIGHT_GRAY;
-
-            setContentAreaFilled(false);
-        }
-
-
-        // Getter methods
-
-        public Chair getChair() {
-            return chair;
-        }
-
-        public Reserve getReserve() {
-            return reserve;
-        }
-
-        public int getRadius() {
-            return radius;
-        }
-
-        public Color getBorderColor() {
-            return borderColor;
-        }
-
-        public Color getOnPressBackground() {
-            return onPressBackground;
-        }
-
-
-        // Setter methods
-
-        public void setChair(Chair chair) {
-            this.chair = chair;
-        }
-
-        public void setReserve(Reserve reserve) {
-            this.reserve = reserve;
-        }
-
-        public void setRadius(int radius) {
-            this.radius = radius;
-        }
-
-        public void setBorderColor(Color borderColor) {
-            this.borderColor = borderColor;
-        }
-
-        public void setOnPressBackground(Color onPressBackground) {
-            this.onPressBackground = onPressBackground;
-        }
-
-
-        // Main methods
-
-        protected void paintComponent(Graphics g) {
-            if (getModel().isArmed()) {
-                g.setColor(this.getOnPressBackground());
-            } else {
-                g.setColor(getBackground());
+                        break;
+                    }
+                }
             }
-            g.fillRoundRect(0, 0, getWidth(), getHeight(), this.getRadius(), this.getRadius());
-            super.paintComponent(g);
-        }
-
-        protected void paintBorder(Graphics g) {
-            g.setColor(this.getBorderColor());
-            g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, this.getRadius(), this.getRadius());
         }
     }
 }

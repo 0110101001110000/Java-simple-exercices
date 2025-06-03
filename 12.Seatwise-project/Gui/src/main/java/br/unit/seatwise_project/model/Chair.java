@@ -32,4 +32,12 @@ public class Chair {
     public void setId(Long id) {
         this.id = id;
     }
+
+
+    // Main methods
+
+    @Override
+    public String toString() {
+        return String.format("%s: %d", super.toString(), this.getId());
+    }
 }

@@ -52,4 +52,12 @@ public class Reserve {
     public void setChairId(Long chairId) {
         this.chairId = chairId;
     }
+
+
+    // Main methods
+
+    @Override
+    public String toString() {
+        return String.format("%s: %d,%s,%s", super.toString(), this.getId(), this.getClientId(), this.getChairId());
+    }
 }

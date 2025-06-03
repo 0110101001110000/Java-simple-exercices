@@ -7,7 +7,7 @@ import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.service.ChairService;
 import br.unit.seatwise_project.service.ReserveService;
 import br.unit.seatwise_project.utility.LoggerUtils;
-import br.unit.seatwise_project.view.MainJFrame;
+import br.unit.seatwise_project.view.ui.ChairButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -69,7 +69,7 @@ public class MainController {
     public static void addReserve(Reserve reserve) {
         try {
             String response = ReserveService.addReserve(reserve).get();
-            logger.info(response);
+            logger.info("Mensagem da requisição: " + response);
         }
         catch (CompletionException completionException) {
             String message = "Erro de conexão ao comunicar-se com a Api";
@@ -84,7 +84,7 @@ public class MainController {
     public static void deleteReserve(Long id) {
         try {
             String response = ReserveService.deleteReserve(id).get();
-            logger.info(response);
+            logger.info("Mensagem da requisição: " + response);
         }
         catch (CompletionException completionException) {
             String message = "Erro de conexão ao comunicar-se com a Api";
@@ -106,15 +106,20 @@ public class MainController {
 
         private final Logger logger = LoggerUtils.getLogger(ClickActionHandler.class);
 
-        private final MainJFrame.ReserveButton reserveButton;
-        private final Client                   client;
+        private final ChairButton chairButton;
+        private final Client      client;
+        private final Chair       chair;
+
+        private Reserve reserve;
 
 
         // Constructors
 
-        public ClickActionHandler(MainJFrame.ReserveButton reserveButton, Client client) {
-            this.reserveButton = reserveButton;
-            this.client        = client;
+        public ClickActionHandler(ChairButton chairButton) {
+            this.chairButton = chairButton;
+            this.client      = chairButton.getClient();
+            this.chair       = chairButton.getChair();
+            this.reserve     = chairButton.getReserve();
         }
 
 
@@ -122,29 +127,60 @@ public class MainController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource().equals(this.reserveButton)) {
-                if (this.reserveButton.getReserve() == null) {
+            if (e.getSource().equals(this.chairButton)) {
+                if (this.reserve == null) {
                     int confirmation = JOptionPane.showConfirmDialog(
                             null,
-                            String.format("Reservar a cadeira de id %d?", this.reserveButton.getChair().getId()),
+                            String.format("Reservar a cadeira de id %d?", this.chairButton.getChair().getId()),
                             "Reservar Cadeira",
                             JOptionPane.OK_CANCEL_OPTION,
                             JOptionPane.QUESTION_MESSAGE
                     );
                     if (confirmation == JOptionPane.YES_OPTION) {
-                        addReserve(new Reserve(null, client.getId(), this.reserveButton.getChair().getId()));
+                        logger.info("Tentando reservar cadeira de id " + this.chair.getId());
+
+                        Reserve newReserve = new Reserve(null, this.client.getId(), this.chair.getId());
+
+                        addReserve(newReserve);
+
+                        List<Reserve> reserves = getAllReserves();
+                        if (reserves != null) {
+                            for (Reserve reserve : reserves) {
+                                if (newReserve.getClientId().equals(reserve.getClientId()) && newReserve.getChairId().equals(reserve.getChairId())) {
+                                    newReserve.setId(reserve.getId());
+                                }
+                            }
+                        }
+
+                        // Fetch chair button
+                        if (newReserve.getId() != null) {
+                            this.chairButton.setReserve(newReserve);
+                            this.reserve = newReserve;
+                            this.chairButton.fetch();
+                        }
+
+                        logger.info("Reserva concluída com sucesso");
                     }
                 }
-                else if (this.client.getId().equals(this.reserveButton.getReserve().getClientId())) {
+                else if (this.client.getId().equals(this.reserve.getClientId())) {
                     int confirmation = JOptionPane.showConfirmDialog(
                             null,
-                            String.format("Cancelar sua reserva da cadeira de id %d?", this.reserveButton.getChair().getId()),
+                            String.format("Cancelar sua reserva da cadeira de id %d?", this.chair.getId()),
                             "Cancelar Reserva",
                             JOptionPane.YES_NO_OPTION,
                             JOptionPane.WARNING_MESSAGE
                     );
                     if (confirmation == JOptionPane.YES_OPTION) {
-                        deleteReserve(this.reserveButton.getReserve().getId());
+                        logger.info("Tentando cancelar reserva da cadeira de id " + this.chair.getId());
+
+                        deleteReserve(this.reserve.getId());
+
+                        // Fetch chair button
+                        this.chairButton.setReserve(null);
+                        this.reserve = null;
+                        this.chairButton.fetch();
+
+                        logger.info("Cancelamento de reserva concluído com sucesso");
                     }
                 }
                 else {

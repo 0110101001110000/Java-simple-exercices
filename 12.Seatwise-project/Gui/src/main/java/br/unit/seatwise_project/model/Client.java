@@ -68,6 +68,6 @@ public class Client {
 
     @Override
     public String toString() {
-        return String.format("%d,%s,%s,%s", this.getId(), this.getEmail(), this.getPassword(), this.getPhone());
+        return String.format("%s: %d,%s,%s,%s", super.toString(), this.getId(), this.getEmail(), this.getPassword(), this.getPhone());
     }
 }
