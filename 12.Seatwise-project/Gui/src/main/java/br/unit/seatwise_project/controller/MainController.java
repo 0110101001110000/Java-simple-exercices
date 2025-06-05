@@ -5,6 +5,7 @@ import br.unit.seatwise_project.model.Chair;
 import br.unit.seatwise_project.model.Client;
 import br.unit.seatwise_project.model.Reserve;
 import br.unit.seatwise_project.service.ChairService;
+import br.unit.seatwise_project.service.ClientService;
 import br.unit.seatwise_project.service.ReserveService;
 import br.unit.seatwise_project.utility.LoggerUtils;
 import br.unit.seatwise_project.view.ui.ChairButton;
@@ -96,6 +97,36 @@ public class MainController {
         }
     }
 
+    public static Client getClientByEmail(String email) {
+        try {
+            return ClientService.getClientByEmail(email).get();
+        }
+        catch (CompletionException completionException) {
+            String message = "Erro de conexão ao comunicar-se com a Api";
+            logger.log(Level.SEVERE,message, completionException);
+            JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+        catch (Exception exception) {
+            logger.log(Level.SEVERE,"Erro na requisição ao obter cliente", exception);
+            return null;
+        }
+    }
+
+    public static void addClient(Client client) {
+        try {
+            String response = ClientService.addClient(client).get();
+            logger.info("Mensagem da requisição: " + response);
+        }
+        catch (CompletionException completionException) {
+            String message = "Erro de conexão ao comunicar-se com a Api";
+            logger.log(Level.SEVERE,message, completionException);
+            JOptionPane.showMessageDialog(null, message, "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+        catch (Exception exception) {
+            logger.log(Level.SEVERE,"Erro na requisição ao registrar cliente", exception);
+        }
+    }
 
     // Private classes
 

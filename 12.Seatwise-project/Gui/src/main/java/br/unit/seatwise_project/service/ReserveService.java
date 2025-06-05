@@ -68,7 +68,7 @@ public class ReserveService {
         return response
                 .thenApply(HttpResponse::body)
                 .exceptionally(exception -> {
-                    logger.log(Level.SEVERE,"Erro na requisição ao obter criar reserva", exception);
+                    logger.log(Level.SEVERE,"Erro na requisição ao criar reserva", exception);
                     return null;
                 }
         );
