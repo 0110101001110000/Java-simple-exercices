@@ -13,14 +13,16 @@ public class Client {
     private Long   id;
     private String email;
     private String password;
+    private String phone;
 
 
     // Constructors
 
-    public Client(Long id, String email, String password) {
-        this.id       = id;
-        this.email    = email;
+    public Client(Long id, String email, String password, String phone) {
+        this.id = id;
+        this.email = email;
         this.password = password;
+        this.phone = phone;
     }
 
 
@@ -38,6 +40,10 @@ public class Client {
         return password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
 
     // Setter methods
 
@@ -53,11 +59,15 @@ public class Client {
         this.password = password;
     }
 
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 
     // Main methods
 
     @Override
     public String toString() {
-        return String.format("%d,%s,%s", getId(), getEmail(), getPassword());
+        return String.format("%d,%s,%s,%s", getId(), getEmail(), getPassword(), getPhone());
     }
 }

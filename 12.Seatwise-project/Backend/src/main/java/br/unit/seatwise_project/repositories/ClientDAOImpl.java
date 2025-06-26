@@ -38,9 +38,10 @@ public class ClientDAOImpl implements ClientDAO {
             Long     userId       = Long.parseLong(cols[0]);
             String   userEmail    = cols[1];
             String   userPassword = cols[2];
+            String   userPhone    = cols[3];
 
             if (email.equals(userEmail)) {
-                return new Client(userId, userEmail, userPassword);
+                return new Client(userId, userEmail, userPassword, userPhone);
             }
         }
         return null;
@@ -49,7 +50,7 @@ public class ClientDAOImpl implements ClientDAO {
     @Override
     public String saveClient(Client client) throws IOException {
         client.setId(this.database.generateNextId());
-        this.database.createRecord(String.format("%d,%s,%s", client.getId(), client.getEmail(), client.getPassword()));
+        this.database.createRecord(String.format("%d,%s,%s,%s", client.getId(), client.getEmail(), client.getPassword(), client.getPhone()));
         return "Usuário criado com sucesso";
     }
 }

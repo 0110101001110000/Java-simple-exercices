@@ -22,7 +22,7 @@ public class ClientController {
 
     // Attributes
 
-    private final Logger logger     = Logger.getLogger(ClientController.class.getName());
+    private final Logger logger = Logger.getLogger(ClientController.class.getName());
 
     private final ClientService clientService;
 
