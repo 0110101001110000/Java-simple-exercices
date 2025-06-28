@@ -36,6 +36,7 @@ public class ReserveDAOImpl implements ReserveDAO {
     @Override
     public List<Reserve> getAllReserves() throws IOException {
         List<Reserve> list = new ArrayList<>();
+
         for (String row : this.database.readRecords()) {
             String[] cols     = row.split(",");
             Long     id       = Long.parseLong(cols[0]);
@@ -43,29 +44,23 @@ public class ReserveDAOImpl implements ReserveDAO {
             Long     chairId  = Long.parseLong(cols[2]);
             list.add(new Reserve(id, clientId, chairId));
         }
+
         return list;
     }
 
     @Override
     public String saveReserve(Reserve reserve) throws IOException {
         reserve.setId(this.database.generateNextId());
+
         this.database.createRecord(
                 String.format("%d,%d,%d", reserve.getId(), reserve.getClientId(), reserve.getChairId())
         );
+
         return "Reserva criada com sucesso";
     }
 
     @Override
     public String deleteReserve(Long id) throws IOException {
-        List<String> rows = this.database.readRecords();
-        for (String row : rows) {
-            String[] cols      = row.split(",");
-            Long     reserveId = Long.parseLong(cols[0]);
-            if (id.equals(reserveId)) {
-                this.database.deleteRecord(rows.indexOf(row));
-                return "Reserva removida com sucesso";
-            }
-        }
-        return null;
+        return (this.database.deleteRecord(id)) ? "Reserva removida com sucesso" : null;
     }
 }

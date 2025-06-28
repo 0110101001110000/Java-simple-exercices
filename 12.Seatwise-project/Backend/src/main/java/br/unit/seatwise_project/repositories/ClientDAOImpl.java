@@ -44,6 +44,7 @@ public class ClientDAOImpl implements ClientDAO {
                 return new Client(userId, userEmail, userPassword, userPhone);
             }
         }
+
         return null;
     }
 
@@ -51,6 +52,7 @@ public class ClientDAOImpl implements ClientDAO {
     public String saveClient(Client client) throws IOException {
         client.setId(this.database.generateNextId());
         this.database.createRecord(String.format("%d,%s,%s,%s", client.getId(), client.getEmail(), client.getPassword(), client.getPhone()));
+
         return "Usuário criado com sucesso";
     }
 }
